@@ -1,0 +1,163 @@
+{
+  "contractAddress": "0x0000000000000000000000000000000000000000",
+  "network": "sepolia",
+  "chainId": 11155111,
+  "deployedAt": "Not yet deployed – run: npx hardhat run scripts/deploy.js --network sepolia",
+  "deployer": "",
+  "abi": [
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [{"indexed": true, "name": "jobId", "type": "uint256"}, {"indexed": false, "name": "reportCount", "type": "uint256"}],
+      "name": "JobMarkedSuspicious",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [{"indexed": true, "name": "jobId", "type": "uint256"}, {"indexed": true, "name": "recruiter", "type": "address"}, {"indexed": false, "name": "cid", "type": "string"}, {"indexed": false, "name": "dataHash", "type": "bytes32"}, {"indexed": false, "name": "timestamp", "type": "uint256"}],
+      "name": "JobPosted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [{"indexed": true, "name": "jobId", "type": "uint256"}, {"indexed": true, "name": "reporter", "type": "address"}, {"indexed": false, "name": "reportCount", "type": "uint256"}],
+      "name": "JobReported",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [{"indexed": true, "name": "recruiter", "type": "address"}, {"indexed": false, "name": "timestamp", "type": "uint256"}],
+      "name": "RecruiterVerified",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [{"indexed": true, "name": "recruiter", "type": "address"}, {"indexed": false, "name": "slashedAmount", "type": "uint256"}],
+      "name": "RecruiterSlashed",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "jobCount",
+      "outputs": [{"name": "", "type": "uint256"}],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [{"name": "", "type": "address"}],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [{"name": "recruiter", "type": "address"}],
+      "name": "isVerifiedRecruiter",
+      "outputs": [{"name": "", "type": "bool"}],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [{"name": "recruiter", "type": "address"}],
+      "name": "verifyRecruiter",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [{"name": "recruiter", "type": "address"}],
+      "name": "slashRecruiter",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [{"name": "cid", "type": "string"}, {"name": "dataHash", "type": "bytes32"}],
+      "name": "postJob",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [{"name": "jobId", "type": "uint256"}],
+      "name": "getJob",
+      "outputs": [
+        {"name": "id", "type": "uint256"},
+        {"name": "cid", "type": "string"},
+        {"name": "dataHash", "type": "bytes32"},
+        {"name": "recruiter", "type": "address"},
+        {"name": "timestamp", "type": "uint256"},
+        {"name": "reportCount", "type": "uint256"},
+        {"name": "isSuspicious", "type": "bool"},
+        {"name": "isActive", "type": "bool"}
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getAllJobIds",
+      "outputs": [{"name": "", "type": "uint256[]"}],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [{"name": "jobId", "type": "uint256"}],
+      "name": "reportJob",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [{"name": "jobId", "type": "uint256"}],
+      "name": "deleteJob",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [{"name": "jobId", "type": "uint256"}, {"name": "providedHash", "type": "bytes32"}],
+      "name": "verifyJobIntegrity",
+      "outputs": [{"name": "", "type": "bool"}],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [{"name": "recruiter", "type": "address"}],
+      "name": "getRecruiter",
+      "outputs": [
+        {"name": "isVerified", "type": "bool"},
+        {"name": "reputation", "type": "uint256"},
+        {"name": "jobsPosted", "type": "uint256"},
+        {"name": "stake", "type": "uint256"},
+        {"name": "joinedAt", "type": "uint256"}
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "depositStake",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [{"name": "", "type": "address"}],
+      "name": "recruiters",
+      "outputs": [
+        {"name": "isVerified", "type": "bool"},
+        {"name": "reputation", "type": "uint256"},
+        {"name": "jobsPosted", "type": "uint256"},
+        {"name": "stake", "type": "uint256"},
+        {"name": "joinedAt", "type": "uint256"}
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ]
+}
