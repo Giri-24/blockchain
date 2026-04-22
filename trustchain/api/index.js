@@ -6,7 +6,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// This is the part that talks to Pinata (IPFS)
 app.post('/api/upload-ipfs', async (req, res) => {
     try {
         const response = await axios.post('https://api.pinata.cloud/pinning/pinJSONToIPFS', req.body, {
@@ -17,9 +16,8 @@ app.post('/api/upload-ipfs', async (req, res) => {
         });
         res.json({ cid: response.data.IpfsHash });
     } catch (error) {
-        res.status(500).json({ error: "Pinata Upload Failed: " + error.message });
+        res.status(500).json({ error: error.message });
     }
 });
 
-// IMPORTANT: Export for Vercel
 module.exports = app;
