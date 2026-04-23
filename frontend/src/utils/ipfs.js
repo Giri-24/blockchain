@@ -18,7 +18,6 @@ export async function uploadToIPFS(jobData) {
 
   // Add hash to the data for self-verification
   const dataWithHash = { ...jobData, integrity: { sha256: hash, timestamp: Date.now() } };
-  const finalJson = JSON.stringify(dataWithHash, null, 2);
 
   try {
     let cid;
