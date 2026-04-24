@@ -9,7 +9,8 @@
     "deploy:local": "npx hardhat run scripts/deploy.js --network localhost",
     "deploy:sepolia": "npx hardhat run scripts/deploy.js --network sepolia",
     "node": "npx hardhat node",
-    "clean": "npx hardhat clean"
+    "clean": "npx hardhat clean",
+    "start": "node api/index.js"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^4.0.0",

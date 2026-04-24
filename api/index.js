@@ -23,3 +23,11 @@ app.post('/api/upload-ipfs', async (req, res) => {
 const serverless = require('serverless-http');
 module.exports = app;
 module.exports.handler = serverless(app);
+
+// Start server if running directly (e.g., on Render)
+if (require.main === module) {
+    const port = process.env.PORT || 3001;
+    app.listen(port, () => {
+        console.log(`Server listening on port ${port}`);
+    });
+}
