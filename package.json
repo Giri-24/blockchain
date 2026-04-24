@@ -13,14 +13,15 @@
     "start": "node api/index.js"
   },
   "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "^3.1.3",
     "@nomicfoundation/hardhat-toolbox": "^4.0.0",
-    "hardhat": "^2.19.0"
+    "hardhat": "^2.28.6"
   },
   "dependencies": {
     "axios": "^1.6.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
-    "ethers": "^5.7.2",
+    "ethers": "^6.16.0",
     "express": "^4.18.2",
     "serverless-http": "^4.0.0"
   }
