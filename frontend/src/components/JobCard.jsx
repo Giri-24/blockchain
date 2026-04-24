@@ -132,9 +132,21 @@ export default function JobCard({ job, onReport, canReport = true }) {
           <a
             href={`https://gateway.pinata.cloud/ipfs/${cid}`}
             target="_blank" rel="noopener noreferrer"
-            className="font-mono text-xs text-gray-600 hover:text-cyber-blue transition-colors truncate block">
-            ipfs://{cid?.slice(0, 20)}...
+            className="font-mono text-xs text-gray-600 hover:text-cyber-blue transition-colors truncate block mb-2">
+            🔗 IPFS Link: ipfs://{cid?.slice(0, 20)}...
           </a>
+          
+          {/* Transparency Log Segment */}
+          <div className="mt-3 p-3 bg-black/40 border border-cyber-border rounded text-[10px] font-mono text-gray-400 space-y-1">
+             <div className="mb-1 text-cyber-green text-xs font-bold flex items-center gap-2">
+                <span className="w-1.5 h-1.5 bg-cyber-green rounded-full animate-pulse"></span>
+                Blockchain Transparency Log
+             </div>
+             <div className="flex justify-between"><span className="text-gray-500">Authenticity Hash:</span> <span>{job.dataHash ? `${job.dataHash.slice(0, 16)}...` : 'N/A'}</span></div>
+             <div className="flex justify-between"><span className="text-gray-500">Verified Timestamp:</span> <span>{job.timestamp}</span></div>
+             <div className="flex justify-between"><span className="text-gray-500">Verified Network:</span> <span className="text-cyber-blue">Ethereum</span></div>
+             <div className="flex justify-between"><span className="text-gray-500">Publisher:</span> <span>{job.recruiter ? `${job.recruiter.slice(0,10)}...` : 'N/A'}</span></div>
+          </div>
         </div>
       </div>
     </div>
