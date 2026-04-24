@@ -8,15 +8,15 @@ const Web3Context = createContext(null);
 export const SEPOLIA_CHAIN_ID = "0xaa36a7"; // 11155111
 
 export function Web3Provider({ children }) {
-  const [provider, setProvider]           = useState(null);
-  const [signer, setSigner]               = useState(null);
-  const [contract, setContract]           = useState(null);
-  const [account, setAccount]             = useState(null);
-  const [isOwner, setIsOwner]             = useState(false);
+  const [provider, setProvider] = useState(null);
+  const [signer, setSigner] = useState(null);
+  const [contract, setContract] = useState(null);
+  const [account, setAccount] = useState(null);
+  const [isOwner, setIsOwner] = useState(false);
   const [isVerifiedRecruiter, setIsVerifiedRecruiter] = useState(false);
-  const [networkName, setNetworkName]     = useState("");
-  const [isConnecting, setIsConnecting]   = useState(false);
-  const [chainId, setChainId]             = useState(null);
+  const [networkName, setNetworkName] = useState("");
+  const [isConnecting, setIsConnecting] = useState(false);
+  const [chainId, setChainId] = useState(null);
 
   const initContract = useCallback((signerOrProvider) => {
     try {
@@ -37,35 +37,31 @@ export function Web3Provider({ children }) {
     try {
       const ownerAddr = await c.owner();
       setIsOwner(ownerAddr.toLowerCase() === addr.toLowerCase());
-      const verified  = await c.isVerifiedRecruiter(addr);
+      const verified = await c.isVerifiedRecruiter(addr);
       setIsVerifiedRecruiter(verified);
     } catch (err) {
       console.error("Role check error:", err);
     }
   }, []);
 
-  const connectWallet = useCallback(async (isManual = true) => {
+  const connectWallet = useCallback(async () => {
     if (!window.ethereum) {
-      if (isManual) toast.error("MetaMask not detected! Please install MetaMask.");
+      toast.error("MetaMask not detected! Please install MetaMask.");
       return;
     }
-    
     setIsConnecting(true);
     try {
-      // Request accounts - only eth_requestAccounts triggers popup
-      // eth_accounts is silent
-      const method = isManual ? "eth_requestAccounts" : "eth_accounts";
-      const accounts = await window.ethereum.request({ method });
-      
-      if (accounts.length === 0) {
-        if (isManual) toast.error("No accounts found. Please unlock MetaMask.");
-        setIsConnecting(false);
-        return;
-      }
+      // ✅ Forces MetaMask to show the account selection popup every time
+      await window.ethereum.request({
+        method: "wallet_requestPermissions",
+        params: [{ eth_accounts: {} }],
+      });
 
+      // Request accounts
+      const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
       const web3Provider = new ethers.BrowserProvider(window.ethereum);
-      const web3Signer   = await web3Provider.getSigner();
-      const network      = await web3Provider.getNetwork();
+      const web3Signer = await web3Provider.getSigner();
+      const network = await web3Provider.getNetwork();
 
       setProvider(web3Provider);
       setSigner(web3Signer);
@@ -76,10 +72,10 @@ export function Web3Provider({ children }) {
       const c = initContract(web3Signer);
       if (c) await checkRoles(c, accounts[0]);
 
-      if (isManual) toast.success("Wallet connected!");
+      toast.success("Wallet connected!");
     } catch (err) {
       console.error("Connect error:", err);
-      if (isManual) toast.error(err.message || "Failed to connect wallet");
+      toast.error(err.message || "Failed to connect wallet");
     } finally {
       setIsConnecting(false);
     }
@@ -94,7 +90,6 @@ export function Web3Provider({ children }) {
     setIsVerifiedRecruiter(false);
     setNetworkName("");
     setChainId(null);
-    // Clear auto-connect preference if you implemented one
     toast.success("Wallet disconnected");
   }, []);
 
@@ -120,16 +115,28 @@ export function Web3Provider({ children }) {
     }
   }, []);
 
-  // Listen for account/network changes
+  // ✅ FIX 1: Force reset on every mount/refresh
   useEffect(() => {
-    if (!window.ethereum) return;
+    // Always start disconnected — user must click Connect
+    setProvider(null);
+    setSigner(null);
+    setContract(null);
+    setAccount(null);
+    setIsOwner(false);
+    setIsVerifiedRecruiter(false);
+    setNetworkName("");
+    setChainId(null);
+  }, []);
+
+  // ✅ FIX 2: Only attach listeners when user is actually connected
+  useEffect(() => {
+    if (!window.ethereum || !account) return;
 
     const handleAccountsChanged = async (accounts) => {
       if (accounts.length === 0) {
         disconnectWallet();
       } else {
         setAccount(accounts[0]);
-        // Update roles for the new account
         if (contract) await checkRoles(contract, accounts[0]);
       }
     };
@@ -146,28 +153,13 @@ export function Web3Provider({ children }) {
       window.ethereum.removeListener("accountsChanged", handleAccountsChanged);
       window.ethereum.removeListener("chainChanged", handleChainChanged);
     };
-  }, [contract, checkRoles, disconnectWallet]);
-
-  // Persistent Auto-connect check
-  useEffect(() => {
-    const checkConnection = async () => {
-      if (window.ethereum) {
-        // Just check if we already have authorized accounts
-        const accounts = await window.ethereum.request({ method: "eth_accounts" });
-        if (accounts.length > 0) {
-          connectWallet(false); // Silent connect
-        }
-      }
-    };
-    checkConnection();
-  }, [connectWallet]);
+  }, [account, contract, checkRoles, disconnectWallet]);
 
   const value = {
     provider, signer, contract, account,
     isOwner, isVerifiedRecruiter,
     networkName, chainId, isConnecting,
-    connectWallet: () => connectWallet(true), // Manual connect
-    disconnectWallet, switchToSepolia,
+    connectWallet, disconnectWallet, switchToSepolia,
     contractAddress: contractData.contractAddress,
     isOnSepolia: chainId === SEPOLIA_CHAIN_ID,
   };
