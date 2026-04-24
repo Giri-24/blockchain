@@ -136,28 +136,8 @@ export function Web3Provider({ children }) {
     };
   }, [contract, checkRoles, disconnectWallet]);
 
-  // Auto-reconnect ONLY ONCE on mount
-  useEffect(() => {
-    if (!window.ethereum) return;
-    window.ethereum.request({ method: "eth_accounts" }).then(async (accounts) => {
-      if (accounts.length > 0) {
-        try {
-          const web3Provider = new ethers.BrowserProvider(window.ethereum);
-          const web3Signer   = await web3Provider.getSigner();
-          const network      = await web3Provider.getNetwork();
-          setProvider(web3Provider);
-          setSigner(web3Signer);
-          setAccount(accounts[0]);
-          setChainId("0x" + network.chainId.toString(16));
-          setNetworkName(network.name);
-          const c = initContract(web3Signer);
-          if (c) await checkRoles(c, accounts[0]);
-        } catch (err) {
-          console.error("Auto-reconnect failed:", err);
-        }
-      }
-    });
-  }, [initContract, checkRoles]);
+  // Auto-reconnect has been intentionally disabled per user request.
+  // The user MUST click a connect button to trigger MetaMask each session.
 
   const value = {
     provider, signer, contract, account,
