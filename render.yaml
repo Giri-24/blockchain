@@ -3,9 +3,11 @@ services:
   - type: web
     name: trustchain-api
     env: node
-    buildCommand: npm install
+    buildCommand: npm install --legacy-peer-deps
     startCommand: npm start
     envVars:
+      - key: NPM_CONFIG_LEGACY_PEER_DEPS
+        value: "true"
       - key: PINATA_KEY
         generateValue: true
       - key: PINATA_SECRET
@@ -15,9 +17,11 @@ services:
   - type: web
     name: trustchain-frontend
     env: static
-    buildCommand: npm --prefix frontend install && npm --prefix frontend run build
+    buildCommand: npm --prefix frontend install --legacy-peer-deps && npm --prefix frontend run build
     staticPublishPath: ./frontend/build
     envVars:
+      - key: NPM_CONFIG_LEGACY_PEER_DEPS
+        value: "true"
       - key: REACT_APP_PINATA_API_KEY
         sync: false
       - key: REACT_APP_PINATA_SECRET
