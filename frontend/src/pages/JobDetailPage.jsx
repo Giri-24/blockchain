@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 
 export default function JobDetailPage() {
   const { id }          = useParams();
-  const { contract, account } = useWeb3();
+  const { contract, account, connectWallet } = useWeb3();
   const [job, setJob]   = useState(null);
   const [ipfsData, setIpfsData] = useState(null);
   const [loading, setLoading]   = useState(true);
@@ -117,10 +117,17 @@ export default function JobDetailPage() {
               
               {ipfsData?.officialUrl && (
                 <div className="mb-6">
-                  <a href={ipfsData.officialUrl} target="_blank" rel="noopener noreferrer"
-                    className="inline-block px-6 py-2.5 font-mono font-bold bg-cyber-green text-cyber-dark rounded-lg hover:bg-cyber-green/90 transition-all shadow-lg shadow-cyber-green/20">
-                    Apply on Official Website ↗
-                  </a>
+                  {account ? (
+                    <a href={ipfsData.officialUrl} target="_blank" rel="noopener noreferrer"
+                      className="inline-block px-6 py-2.5 font-mono font-bold bg-cyber-green text-cyber-dark rounded-lg hover:bg-cyber-green/90 transition-all shadow-lg shadow-cyber-green/20">
+                      Apply on Official Website ↗
+                    </a>
+                  ) : (
+                    <button onClick={connectWallet}
+                      className="inline-block px-6 py-2.5 font-mono font-bold bg-transparent border-2 border-cyber-green text-cyber-green rounded-lg hover:bg-cyber-green/10 transition-all">
+                      Connect Wallet to Apply
+                    </button>
+                  )}
                 </div>
               )}
 

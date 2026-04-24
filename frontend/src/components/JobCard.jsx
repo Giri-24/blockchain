@@ -1,9 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useWeb3 } from "../context/Web3Context";
 
 const REPORT_THRESHOLD = 5;
 
 export default function JobCard({ job, onReport, canReport = true }) {
+  const { account, connectWallet } = useWeb3();
   const {
     id, cid, recruiter, timestamp, reportCount,
     isSuspicious, ipfsData, verifyStatus,
@@ -106,10 +108,17 @@ export default function JobCard({ job, onReport, canReport = true }) {
               View
             </Link>
             {ipfsData?.officialUrl && (
-              <a href={ipfsData.officialUrl} target="_blank" rel="noopener noreferrer"
-                className="px-2.5 py-1 text-xs font-mono font-bold bg-cyber-green text-cyber-dark rounded hover:bg-cyber-green/90 transition-all shadow-lg shadow-cyber-green/20">
-                Apply Now ↗
-              </a>
+              account ? (
+                <a href={ipfsData.officialUrl} target="_blank" rel="noopener noreferrer"
+                  className="px-2.5 py-1 text-xs font-mono font-bold bg-cyber-green text-cyber-dark rounded hover:bg-cyber-green/90 transition-all shadow-lg shadow-cyber-green/20">
+                  Apply Now ↗
+                </a>
+              ) : (
+                <button onClick={(e) => { e.preventDefault(); connectWallet(); }}
+                  className="px-2.5 py-1 text-xs font-mono font-bold text-cyber-green border-2 border-cyber-green rounded hover:bg-cyber-green/20 transition-all">
+                  Connect to Apply
+                </button>
+              )
             )}
           </div>
         </div>
