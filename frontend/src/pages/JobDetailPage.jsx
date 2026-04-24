@@ -114,6 +114,16 @@ export default function JobDetailPage() {
                 {ipfsData?.title || "Job #" + id}
               </h1>
               <p className="text-gray-400 font-body text-lg mb-4">{ipfsData?.company}</p>
+              
+              {ipfsData?.officialUrl && (
+                <div className="mb-6">
+                  <a href={ipfsData.officialUrl} target="_blank" rel="noopener noreferrer"
+                    className="inline-block px-6 py-2.5 font-mono font-bold bg-cyber-green text-cyber-dark rounded-lg hover:bg-cyber-green/90 transition-all shadow-lg shadow-cyber-green/20">
+                    Apply on Official Website ↗
+                  </a>
+                </div>
+              )}
+
               <div className="flex flex-wrap gap-3 mb-4">
                 {[
                   { icon: "📍", val: ipfsData?.location },

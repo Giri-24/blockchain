@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 const INITIAL_FORM = {
   title: "", company: "", location: "", jobType: "Full-time",
   salary: "", experience: "", description: "", requirements: "",
-  skills: "", contactEmail: "",
+  skills: "", contactEmail: "", officialUrl: "",
 };
 
 const JOB_TYPES = ["Full-time", "Part-time", "Contract", "Freelance", "Internship"];
@@ -153,6 +153,7 @@ export default function PostJobPage() {
                 <Field label="Experience" name="experience" value={form.experience} onChange={handleChange} placeholder="e.g. 2-4 years" />
               </div>
               <Field label="Contact Email*" name="contactEmail" value={form.contactEmail} onChange={handleChange} required type="email" placeholder="hr@company.com" />
+              <Field label="Official Job Link (e.g. LinkedIn)*" name="officialUrl" value={form.officialUrl} onChange={handleChange} required type="url" placeholder="https://linkedin.com/jobs/view/1234" />
             </div>
 
             <div className="p-6 rounded-xl bg-cyber-card border border-cyber-border space-y-4">

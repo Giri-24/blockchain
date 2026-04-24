@@ -103,8 +103,14 @@ export default function JobCard({ job, onReport, canReport = true }) {
             )}
             <Link to={`/job/${id}`}
               className="px-2.5 py-1 text-xs font-mono text-cyber-green border border-cyber-green/30 rounded hover:bg-cyber-green/10 transition-all">
-              View →
+              View
             </Link>
+            {ipfsData?.officialUrl && (
+              <a href={ipfsData.officialUrl} target="_blank" rel="noopener noreferrer"
+                className="px-2.5 py-1 text-xs font-mono font-bold bg-cyber-green text-cyber-dark rounded hover:bg-cyber-green/90 transition-all shadow-lg shadow-cyber-green/20">
+                Apply Now ↗
+              </a>
+            )}
           </div>
         </div>
 
