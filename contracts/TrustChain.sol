@@ -40,11 +40,13 @@ contract TrustChain {
     mapping(address => Recruiter)   public recruiters;
     mapping(uint256 => Job)         public jobs;
     mapping(uint256 => mapping(address => bool)) public hasReported;
+    mapping(bytes32 => bool) public jobExistsHash; // Prevent duplicates using signature
 
     // ─── Events ────────────────────────────────────────────────────────────────
 
     event RecruiterVerified(address indexed recruiter, uint256 timestamp);
     event RecruiterSlashed(address indexed recruiter, uint256 slashedAmount);
+    event JobVerified(uint256 indexed jobId, string company, string title, uint256 timestamp); // Transparency Log
     event JobPosted(uint256 indexed jobId, address indexed recruiter, string cid, bytes32 dataHash, uint256 timestamp);
     event JobReported(uint256 indexed jobId, address indexed reporter, uint256 reportCount);
     event JobMarkedSuspicious(uint256 indexed jobId, uint256 reportCount);
@@ -135,13 +137,20 @@ contract TrustChain {
     }
 
     /**
-     * @dev Post a job to the blockchain
+     * @dev Post a job to the blockchain (requires verified signature)
      * @param cid IPFS Content Identifier of the job JSON
      * @param dataHash SHA-256 hash of the job JSON for integrity verification
+     * @param company Company name string (used for duplicate verification)
+     * @param title Job title string (used for duplicate verification)
      */
-    function postJob(string memory cid, bytes32 dataHash) external onlyVerifiedRecruiter {
+    function postJob(string memory cid, bytes32 dataHash, string memory company, string memory title) external onlyVerifiedRecruiter {
         require(bytes(cid).length > 0, "TrustChain: CID cannot be empty");
         require(dataHash != bytes32(0), "TrustChain: dataHash cannot be empty");
+
+        // Duplicate Preventer: Only unique jobs are added
+        bytes32 uniqueSig = keccak256(abi.encodePacked(company, title));
+        require(!jobExistsHash[uniqueSig], "TrustChain: Duplicate Job Detected on Blockchain");
+        jobExistsHash[uniqueSig] = true;
 
         jobCount++;
         jobs[jobCount] = Job({
@@ -157,6 +166,7 @@ contract TrustChain {
 
         recruiters[msg.sender].jobsPosted++;
 
+        emit JobVerified(jobCount, company, title, block.timestamp);
         emit JobPosted(jobCount, msg.sender, cid, dataHash, block.timestamp);
     }
 

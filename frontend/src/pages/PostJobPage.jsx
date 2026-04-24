@@ -12,6 +12,8 @@ const INITIAL_FORM = {
 
 const JOB_TYPES = ["Full-time", "Part-time", "Contract", "Freelance", "Internship"];
 
+const BACKEND_URL = process.env.REACT_APP_API_URL || "http://localhost:3001";
+
 export default function PostJobPage() {
   const { contract, account, isVerifiedRecruiter } = useWeb3();
   const navigate = useNavigate();
@@ -37,8 +39,28 @@ export default function PostJobPage() {
     };
 
     setUploading(true);
+    
+    // 1. Official Company Portal Verification Step via Backend
+    toast.loading("Verifying via Official Job Portal...", { id: "ipfs" });
     try {
-      toast.loading("Uploading to IPFS...", { id: "ipfs" });
+      const verifyRes = await fetch(`${BACKEND_URL}/api/verify-job`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: form.title, company: form.company })
+      });
+      const verifyData = await verifyRes.json();
+      
+      if (!verifyRes.ok) throw new Error(verifyData.error);
+      toast.success(verifyData.message, { id: "ipfs" });
+    } catch (err) {
+      toast.error(err.message || "Portal Verification Failed", { id: "ipfs" });
+      setUploading(false);
+      return; // Stop the process, job cannot be posted
+    }
+
+    // 2. IPFS Upload Step
+    toast.loading("Uploading securely to IPFS...", { id: "ipfs" });
+    try {
       const { cid, hash } = await uploadToIPFS(jobData);
       setTxData({ cid, hash });
       setStep(2);
@@ -53,8 +75,8 @@ export default function PostJobPage() {
     setPosting(true);
     try {
       const bytes32Hash = hashToBytes32(txData.hash);
-      toast.loading("Posting to blockchain...", { id: "tx" });
-      const tx = await contract.postJob(txData.cid, bytes32Hash);
+      toast.loading("Posting to blockchain (Awaiting Signature)...", { id: "tx" });
+      const tx = await contract.postJob(txData.cid, bytes32Hash, form.company, form.title);
       await tx.wait();
       toast.success("Job posted on-chain!", { id: "tx" });
       setStep(3);
