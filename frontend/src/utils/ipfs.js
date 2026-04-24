@@ -1,9 +1,8 @@
 import axios from "axios";
 import { sha256 } from "js-sha256";
 
-const PINATA_API_KEY    = process.env.REACT_APP_PINATA_API_KEY    || "";
-const PINATA_SECRET     = process.env.REACT_APP_PINATA_SECRET     || "";
-const PINATA_JWT        = process.env.REACT_APP_PINATA_JWT        || "";
+// Use the deployed backend URL, or localhost for local testing
+const BACKEND_URL       = process.env.REACT_APP_API_URL       || "http://localhost:3001";
 const PINATA_BASE_URL   = "https://api.pinata.cloud";
 const IPFS_GATEWAY      = "https://gateway.pinata.cloud/ipfs";
 
@@ -22,30 +21,20 @@ export async function uploadToIPFS(jobData) {
   try {
     let cid;
 
-    if (PINATA_JWT || (PINATA_API_KEY && PINATA_SECRET)) {
-      // Real Pinata upload
-      const headers = PINATA_JWT
-        ? { Authorization: `Bearer ${PINATA_JWT}`, "Content-Type": "application/json" }
-        : {
-            pinata_api_key: PINATA_API_KEY,
-            pinata_secret_api_key: PINATA_SECRET,
-            "Content-Type": "application/json",
-          };
-
+    try {
       const response = await axios.post(
-        `${PINATA_BASE_URL}/pinning/pinJSONToIPFS`,
+        `${BACKEND_URL}/api/upload-ipfs`,
         {
           pinataContent: dataWithHash,
           pinataMetadata: { name: `TrustChain_Job_${Date.now()}` },
           pinataOptions: { cidVersion: 1 },
-        },
-        { headers }
+        }
       );
-      cid = response.data.IpfsHash;
-    } else {
-      // Demo mode: generate a mock CID
+      cid = response.data.cid;
+    } catch (apiError) {
+      console.warn("⚠️  Backend API failed, trying demo mode CID:", apiError.message);
+      // Demo mode fallback if backend is not reachable
       cid = "Qm" + hash.substring(0, 44);
-      console.warn("⚠️  No Pinata credentials found – using mock CID for demo:", cid);
     }
 
     return { cid, hash };
