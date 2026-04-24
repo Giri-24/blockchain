@@ -130,27 +130,34 @@ export function Web3Provider({ children }) {
     window.ethereum.on("accountsChanged", handleAccountsChanged);
     window.ethereum.on("chainChanged", handleChainChanged);
 
-    // Auto-reconnect if already connected
-    window.ethereum.request({ method: "eth_accounts" }).then(async (accounts) => {
-      if (accounts.length > 0) {
-        const web3Provider = new ethers.BrowserProvider(window.ethereum);
-        const web3Signer   = await web3Provider.getSigner();
-        const network      = await web3Provider.getNetwork();
-        setProvider(web3Provider);
-        setSigner(web3Signer);
-        setAccount(accounts[0]);
-        setChainId("0x" + network.chainId.toString(16));
-        setNetworkName(network.name);
-        const c = initContract(web3Signer);
-        if (c) await checkRoles(c, accounts[0]);
-      }
-    });
-
     return () => {
       window.ethereum.removeListener("accountsChanged", handleAccountsChanged);
       window.ethereum.removeListener("chainChanged", handleChainChanged);
     };
-  }, [contract, checkRoles, disconnectWallet, initContract]);
+  }, [contract, checkRoles, disconnectWallet]);
+
+  // Auto-reconnect ONLY ONCE on mount
+  useEffect(() => {
+    if (!window.ethereum) return;
+    window.ethereum.request({ method: "eth_accounts" }).then(async (accounts) => {
+      if (accounts.length > 0) {
+        try {
+          const web3Provider = new ethers.BrowserProvider(window.ethereum);
+          const web3Signer   = await web3Provider.getSigner();
+          const network      = await web3Provider.getNetwork();
+          setProvider(web3Provider);
+          setSigner(web3Signer);
+          setAccount(accounts[0]);
+          setChainId("0x" + network.chainId.toString(16));
+          setNetworkName(network.name);
+          const c = initContract(web3Signer);
+          if (c) await checkRoles(c, accounts[0]);
+        } catch (err) {
+          console.error("Auto-reconnect failed:", err);
+        }
+      }
+    });
+  }, [initContract, checkRoles]);
 
   const value = {
     provider, signer, contract, account,
