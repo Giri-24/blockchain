@@ -62,7 +62,7 @@ export default function MyJobsPage() {
 
   if (!account) return (
     <div className="min-h-screen bg-cyber-dark pt-20 flex items-center justify-center">
-      <p className="text-gray-400 font-mono">Connect wallet to view your jobs.</p>
+      <p className="text-gray-600 font-mono">Connect wallet to view your jobs.</p>
     </div>
   );
 
@@ -71,8 +71,8 @@ export default function MyJobsPage() {
       <div className="max-w-5xl mx-auto px-4 py-10">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="font-display text-3xl font-bold text-white">My Jobs</h1>
-            <p className="text-gray-500 font-mono text-sm mt-1">Your posted positions on-chain</p>
+            <h1 className="font-display text-3xl font-bold text-cyber-text">My Jobs</h1>
+            <p className="text-gray-600 font-mono text-sm mt-1">Your posted positions on-chain</p>
           </div>
           {isVerifiedRecruiter && (
             <Link to="/post-job"
@@ -86,10 +86,10 @@ export default function MyJobsPage() {
         {recruiterInfo && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             {[
-              { label: "Reputation", value: recruiterInfo.reputation + "/100", color: Number(recruiterInfo.reputation) >= 70 ? "text-cyber-green" : "text-yellow-400" },
+              { label: "Reputation", value: recruiterInfo.reputation + "/100", color: Number(recruiterInfo.reputation) >= 70 ? "text-cyber-green" : "text-yellow-600" },
               { label: "Jobs Posted", value: recruiterInfo.jobsPosted, color: "text-cyber-blue" },
-              { label: "Joined",      value: recruiterInfo.joinedAt,  color: "text-gray-300" },
-              { label: "Stake (wei)", value: recruiterInfo.stake === "0" ? "None" : recruiterInfo.stake, color: "text-purple-400" },
+              { label: "Joined",      value: recruiterInfo.joinedAt,  color: "text-gray-600" },
+              { label: "Stake (wei)", value: recruiterInfo.stake === "0" ? "None" : recruiterInfo.stake, color: "text-purple-600" },
             ].map(s => (
               <div key={s.label} className="p-4 rounded-xl bg-cyber-card border border-cyber-border">
                 <div className={`font-display text-xl font-bold ${s.color}`}>{s.value}</div>
@@ -124,7 +124,7 @@ export default function MyJobsPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="font-mono text-xs text-gray-500">#{job.id}</span>
-                      <h3 className="font-display text-base font-semibold text-white truncate">
+                      <h3 className="font-display text-base font-semibold text-cyber-text truncate">
                         {job.ipfsData?.title || "Untitled Job"}
                       </h3>
                       {job.isSuspicious && (
@@ -133,7 +133,7 @@ export default function MyJobsPage() {
                         </span>
                       )}
                     </div>
-                    <p className="text-sm text-gray-400 mt-0.5 font-mono">
+                    <p className="text-sm text-gray-600 mt-0.5 font-mono">
                       {job.ipfsData?.company} · {job.ipfsData?.location} · {new Date(Number(job.timestamp) * 1000).toLocaleDateString()}
                     </p>
                     <div className="flex items-center gap-4 mt-2">

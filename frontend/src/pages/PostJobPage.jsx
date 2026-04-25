@@ -88,7 +88,7 @@ export default function PostJobPage() {
 
   if (!account) return (
     <div className="min-h-screen bg-cyber-dark pt-20 flex items-center justify-center">
-      <p className="text-gray-400 font-mono">Connect your wallet to post jobs.</p>
+      <p className="text-gray-600 font-mono">Connect your wallet to post jobs.</p>
     </div>
   );
 
@@ -96,8 +96,8 @@ export default function PostJobPage() {
     <div className="min-h-screen bg-cyber-dark pt-20 flex items-center justify-center">
       <div className="text-center max-w-md">
         <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-yellow-500/10 border border-yellow-500/30 flex items-center justify-center text-2xl">🔒</div>
-        <h2 className="font-display text-xl text-white mb-2">Not Verified</h2>
-        <p className="text-gray-400 font-body">Your wallet is not whitelisted as a verified recruiter. Contact the admin to get verified.</p>
+        <h2 className="font-display text-xl text-cyber-text mb-2">Not Verified</h2>
+        <p className="text-gray-600 font-body">Your wallet is not whitelisted as a verified recruiter. Contact the admin to get verified.</p>
       </div>
     </div>
   );
@@ -106,7 +106,7 @@ export default function PostJobPage() {
     <div className="min-h-screen bg-cyber-dark bg-grid-pattern bg-grid pt-20">
       <div className="max-w-2xl mx-auto px-4 py-10">
 
-        <h1 className="font-display text-3xl font-bold text-white mb-2">Post a Job</h1>
+        <h1 className="font-display text-3xl font-bold text-cyber-text mb-2">Post a Job</h1>
         <p className="text-gray-500 font-mono text-sm mb-8">
           Job data → IPFS → Blockchain. Tamper-proof & immutable.
         </p>
@@ -122,7 +122,7 @@ export default function PostJobPage() {
                     "bg-cyber-card border border-cyber-border text-gray-600"}`}>
                   {step > i + 1 ? "✓" : i + 1}
                 </div>
-                <span className={`font-mono text-xs hidden sm:inline ${step >= i + 1 ? "text-white" : "text-gray-600"}`}>
+                <span className={`font-mono text-xs hidden sm:inline ${step >= i + 1 ? "text-cyber-text font-bold" : "text-gray-500"}`}>
                   {label}
                 </span>
               </div>
@@ -143,8 +143,8 @@ export default function PostJobPage() {
                 <div>
                   <label className="block font-mono text-xs text-gray-400 mb-1.5 uppercase">Job Type</label>
                   <select name="jobType" value={form.jobType} onChange={handleChange}
-                    className="w-full px-3 py-2.5 bg-white/5 border border-cyber-border text-white font-mono text-sm rounded-lg focus:outline-none focus:border-cyber-green/50">
-                    {JOB_TYPES.map(t => <option key={t} value={t} className="bg-cyber-dark">{t}</option>)}
+                    className="w-full px-3 py-2.5 bg-gray-50 border border-cyber-border text-cyber-text font-mono text-sm rounded-lg focus:outline-none focus:border-cyber-green/50">
+                    {JOB_TYPES.map(t => <option key={t} value={t} className="bg-white">{t}</option>)}
                   </select>
                 </div>
               </div>
@@ -204,8 +204,8 @@ export default function PostJobPage() {
             <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-cyber-green/20 border-2 border-cyber-green flex items-center justify-center text-3xl">
               🎉
             </div>
-            <h2 className="font-display text-2xl font-bold text-white mb-2">Job Posted!</h2>
-            <p className="text-gray-400 font-mono">Your job is now live on the Ethereum blockchain</p>
+            <h2 className="font-display text-2xl font-bold text-cyber-text mb-2">Job Posted!</h2>
+            <p className="text-gray-600 font-mono">Your job is now live on the Ethereum blockchain</p>
             <p className="text-gray-600 font-mono text-sm mt-2">Redirecting to My Jobs...</p>
           </div>
         )}
@@ -219,7 +219,7 @@ function Field({ label, name, value, onChange, required, type = "text", placehol
     <div>
       <label className="block font-mono text-xs text-gray-400 mb-1.5 uppercase">{label}</label>
       <input type={type} name={name} value={value} onChange={onChange} required={required} placeholder={placeholder}
-        className="w-full px-3 py-2.5 bg-white/5 border border-cyber-border text-white font-mono text-sm rounded-lg placeholder-gray-600
+        className="w-full px-3 py-2.5 bg-gray-50 border border-cyber-border text-cyber-text font-mono text-sm rounded-lg placeholder-gray-400
           focus:outline-none focus:border-cyber-green/50 transition-colors" />
     </div>
   );
@@ -230,7 +230,7 @@ function Textarea({ label, name, value, onChange, required, rows, placeholder })
     <div>
       <label className="block font-mono text-xs text-gray-400 mb-1.5 uppercase">{label}</label>
       <textarea name={name} value={value} onChange={onChange} required={required} rows={rows} placeholder={placeholder}
-        className="w-full px-3 py-2.5 bg-white/5 border border-cyber-border text-white font-mono text-sm rounded-lg placeholder-gray-600
+        className="w-full px-3 py-2.5 bg-gray-50 border border-cyber-border text-cyber-text font-mono text-sm rounded-lg placeholder-gray-400
           focus:outline-none focus:border-cyber-green/50 transition-colors resize-none" />
     </div>
   );
@@ -240,7 +240,7 @@ function InfoBlock({ label, value }) {
   return (
     <div>
       <p className="font-mono text-xs text-gray-500 uppercase mb-1">{label}</p>
-      <div className="p-2 bg-white/5 rounded font-mono text-xs text-cyber-green break-all">{value}</div>
+      <div className="p-2 bg-gray-100 rounded font-mono text-xs text-cyber-green break-all">{value}</div>
     </div>
   );
 }

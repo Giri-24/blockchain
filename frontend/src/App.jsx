@@ -26,14 +26,14 @@ export default function App() {
             position="bottom-right"
             toastOptions={{
               style: {
-                background: "#0a1628",
-                color: "#fff",
-                border: "1px solid #1a3050",
+                background: "#ffffff",
+                color: "#0f172a",
+                border: "1px solid #e2e8f0",
                 fontFamily: "'JetBrains Mono', monospace",
                 fontSize: "13px",
               },
-              success: { iconTheme: { primary: "#00ff88", secondary: "#050d1a" } },
-              error:   { iconTheme: { primary: "#ef4444", secondary: "#050d1a" } },
+              success: { iconTheme: { primary: "#10b981", secondary: "#ffffff" } },
+              error:   { iconTheme: { primary: "#ef4444", secondary: "#ffffff" } },
             }}
           />
         </div>

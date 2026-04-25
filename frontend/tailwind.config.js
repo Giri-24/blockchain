@@ -14,12 +14,13 @@ module.exports = {
           900: "#0c4a6e",
         },
         cyber: {
-          green:  "#00ff88",
-          blue:   "#00d4ff",
-          purple: "#a855f7",
-          dark:   "#050d1a",
-          card:   "#0a1628",
-          border: "#1a3050",
+          green:  "#10b981", // Emerald 500
+          blue:   "#0ea5e9", // Sky 500
+          purple: "#8b5cf6", // Violet 500
+          dark:   "#ffffff", // Background
+          card:   "#f8fafc", // Card background
+          border: "#e2e8f0", // Border
+          text:   "#0f172a", // Main text
         },
       },
       fontFamily: {

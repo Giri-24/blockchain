@@ -55,10 +55,10 @@ export default function JobCard({ job, onReport, canReport = true }) {
         {/* Header */}
         <div className="flex items-start justify-between gap-4 mb-3">
           <div>
-            <h3 className="font-display text-base font-semibold text-white group-hover:text-cyber-green transition-colors">
+            <h3 className="font-display text-base font-semibold text-cyber-text group-hover:text-cyber-green transition-colors">
               {title}
             </h3>
-            <p className="text-sm text-gray-400 mt-0.5">{company}</p>
+            <p className="text-sm text-gray-600 mt-0.5">{company}</p>
           </div>
           <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-cyber-green/10 border border-cyber-green/20 flex items-center justify-center">
             <span className="text-cyber-green font-display text-sm font-bold">
@@ -152,7 +152,7 @@ export default function JobCard({ job, onReport, canReport = true }) {
           </a>
           
           {/* Transparency Log Segment */}
-          <div className="mt-3 p-3 bg-black/40 border border-cyber-border rounded text-[10px] font-mono text-gray-400 space-y-1">
+          <div className="mt-3 p-3 bg-gray-100 border border-cyber-border rounded text-[10px] font-mono text-gray-600 space-y-1">
              <div className="mb-1 text-cyber-green text-xs font-bold flex items-center gap-2">
                 <span className="w-1.5 h-1.5 bg-cyber-green rounded-full animate-pulse"></span>
                 Blockchain Transparency Log
@@ -170,7 +170,7 @@ export default function JobCard({ job, onReport, canReport = true }) {
 
 function Tag({ icon, text }) {
   return (
-    <span className="flex items-center gap-1 px-2 py-0.5 text-xs font-mono text-gray-400 bg-white/5 rounded">
+    <span className="flex items-center gap-1 px-2 py-0.5 text-xs font-mono text-gray-600 bg-gray-100 rounded">
       <span>{icon}</span><span>{text}</span>
     </span>
   );

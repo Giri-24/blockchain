@@ -89,7 +89,7 @@ export default function JobDetailPage() {
   return (
     <div className="min-h-screen bg-cyber-dark bg-grid-pattern bg-grid pt-20">
       <div className="max-w-4xl mx-auto px-4 py-10">
-        <Link to="/" className="inline-flex items-center gap-2 text-gray-500 hover:text-white font-mono text-sm mb-6 transition-colors">
+        <Link to="/" className="inline-flex items-center gap-2 text-gray-600 hover:text-cyber-text font-mono text-sm mb-6 transition-colors">
           ← Back to Jobs
         </Link>
 
@@ -110,10 +110,10 @@ export default function JobDetailPage() {
           {/* Main content */}
           <div className="lg:col-span-2 space-y-6">
             <div className="p-6 rounded-xl bg-cyber-card border border-cyber-border">
-              <h1 className="font-display text-2xl font-bold text-white mb-1">
+              <h1 className="font-display text-2xl font-bold text-cyber-text mb-1">
                 {ipfsData?.title || "Job #" + id}
               </h1>
-              <p className="text-gray-400 font-body text-lg mb-4">{ipfsData?.company}</p>
+              <p className="text-gray-600 font-body text-lg mb-4">{ipfsData?.company}</p>
               
               {ipfsData?.officialUrl && (
                 <div className="mb-6">
@@ -138,7 +138,7 @@ export default function JobDetailPage() {
                   { icon: "💰", val: ipfsData?.salary },
                   { icon: "🏢", val: ipfsData?.experience },
                 ].filter(x => x.val).map(({ icon, val }) => (
-                  <span key={val} className="px-3 py-1 bg-white/5 text-gray-300 rounded-full font-mono text-sm">
+                  <span key={val} className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full font-mono text-sm">
                     {icon} {val}
                   </span>
                 ))}
@@ -148,10 +148,10 @@ export default function JobDetailPage() {
             {/* Description */}
             {ipfsData?.description && (
               <div className="p-6 rounded-xl bg-cyber-card border border-cyber-border">
-                <h2 className="font-display text-base font-semibold text-white mb-3 uppercase tracking-wide">
+                <h2 className="font-display text-base font-semibold text-cyber-text mb-3 uppercase tracking-wide">
                   Job Description
                 </h2>
-                <p className="text-gray-400 font-body leading-relaxed whitespace-pre-wrap">
+                <p className="text-gray-600 font-body leading-relaxed whitespace-pre-wrap">
                   {ipfsData.description}
                 </p>
               </div>
@@ -160,10 +160,10 @@ export default function JobDetailPage() {
             {/* Requirements */}
             {ipfsData?.requirements && (
               <div className="p-6 rounded-xl bg-cyber-card border border-cyber-border">
-                <h2 className="font-display text-base font-semibold text-white mb-3 uppercase tracking-wide">
+                <h2 className="font-display text-base font-semibold text-cyber-text mb-3 uppercase tracking-wide">
                   Requirements
                 </h2>
-                <p className="text-gray-400 font-body leading-relaxed whitespace-pre-wrap">
+                <p className="text-gray-600 font-body leading-relaxed whitespace-pre-wrap">
                   {ipfsData.requirements}
                 </p>
               </div>
@@ -172,7 +172,7 @@ export default function JobDetailPage() {
             {/* Skills */}
             {ipfsData?.skills?.length > 0 && (
               <div className="p-6 rounded-xl bg-cyber-card border border-cyber-border">
-                <h2 className="font-display text-base font-semibold text-white mb-3 uppercase tracking-wide">Skills</h2>
+                <h2 className="font-display text-base font-semibold text-cyber-text mb-3 uppercase tracking-wide">Skills</h2>
                 <div className="flex flex-wrap gap-2">
                   {ipfsData.skills.map(s => (
                     <span key={s} className="px-3 py-1 font-mono text-sm bg-cyber-blue/10 text-cyber-blue border border-cyber-blue/20 rounded">
@@ -188,7 +188,7 @@ export default function JobDetailPage() {
           <div className="space-y-4">
             {/* Integrity Check */}
             <div className="p-5 rounded-xl bg-cyber-card border border-cyber-border">
-              <h3 className="font-display text-sm font-semibold text-white uppercase tracking-wide mb-4">
+              <h3 className="font-display text-sm font-semibold text-cyber-text uppercase tracking-wide mb-4">
                 Integrity Verification
               </h3>
               {integrity && (
@@ -212,7 +212,7 @@ export default function JobDetailPage() {
 
             {/* Blockchain Info */}
             <div className="p-5 rounded-xl bg-cyber-card border border-cyber-border space-y-3">
-              <h3 className="font-display text-sm font-semibold text-white uppercase tracking-wide">Blockchain Record</h3>
+              <h3 className="font-display text-sm font-semibold text-cyber-text uppercase tracking-wide">Blockchain Record</h3>
               <InfoRow label="Job ID" value={"#" + job.id} />
               <InfoRow label="Posted" value={date} small />
               <InfoRow label="Recruiter" value={`${job.recruiter?.slice(0,10)}...`} mono />
@@ -222,9 +222,9 @@ export default function JobDetailPage() {
 
             {/* IPFS */}
             <div className="p-5 rounded-xl bg-cyber-card border border-cyber-border">
-              <h3 className="font-display text-sm font-semibold text-white uppercase tracking-wide mb-3">IPFS Storage</h3>
+              <h3 className="font-display text-sm font-semibold text-cyber-text uppercase tracking-wide mb-3">IPFS Storage</h3>
               <a href={`https://gateway.pinata.cloud/ipfs/${job.cid}`} target="_blank" rel="noopener noreferrer"
-                className="block p-2 bg-white/5 rounded font-mono text-xs text-cyber-blue hover:text-white break-all transition-colors">
+                className="block p-2 bg-gray-100 rounded font-mono text-xs text-cyber-blue hover:text-cyber-text break-all transition-colors">
                 {job.cid}
               </a>
             </div>
@@ -245,7 +245,7 @@ function InfoRow({ label, value, mono, small, color }) {
   return (
     <div className="flex justify-between items-center">
       <span className="font-mono text-xs text-gray-500 uppercase">{label}</span>
-      <span className={`font-mono text-xs ${color || "text-gray-300"} ${small ? "text-xs" : ""}`}>
+      <span className={`font-mono text-xs ${color || "text-gray-700"} ${small ? "text-xs" : ""}`}>
         {value}
       </span>
     </div>

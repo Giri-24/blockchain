@@ -37,7 +37,7 @@ export default function Navbar() {
                 </svg>
               </div>
             </div>
-            <span className="font-display text-lg font-bold tracking-wider text-white">
+            <span className="font-display text-lg font-bold tracking-wider text-cyber-text">
               TRUST<span className="text-cyber-green">CHAIN</span>
             </span>
           </Link>
@@ -49,7 +49,7 @@ export default function Navbar() {
                 className={`px-4 py-2 rounded font-mono text-sm tracking-wide transition-all ${
                   location.pathname === l.to
                     ? "text-cyber-green bg-cyber-green/10 border border-cyber-green/30"
-                    : "text-gray-400 hover:text-white hover:bg-white/5"
+                    : "text-gray-600 hover:text-cyber-text hover:bg-gray-100"
                 }`}>
                 {l.label}
               </Link>
@@ -68,7 +68,7 @@ export default function Navbar() {
               <div className="flex items-center gap-2">
                 <div className="flex items-center gap-2 px-3 py-1.5 bg-cyber-card border border-cyber-border rounded">
                   <div className="w-2 h-2 rounded-full bg-cyber-green animate-pulse" />
-                  <span className="font-mono text-sm text-gray-300">{shortAddr}</span>
+                  <span className="font-mono text-sm text-gray-600">{shortAddr}</span>
                   {isOwner && (
                     <span className="px-1.5 py-0.5 text-xs bg-purple-500/20 text-purple-400 border border-purple-500/40 rounded">
                       ADMIN
@@ -95,7 +95,7 @@ export default function Navbar() {
 
           {/* Mobile menu button */}
           <button onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden p-2 text-gray-400 hover:text-white">
+            className="md:hidden p-2 text-gray-600 hover:text-cyber-text">
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               {menuOpen
                 ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

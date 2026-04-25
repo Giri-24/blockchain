@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useWeb3 } from "../context/Web3Context";
-import { fetchFromIPFS } from "../utils/ipfs";
+import { fetchFromIPFS, verifyIntegrity } from "../utils/ipfs";
 import JobCard from "../components/JobCard";
 import toast from "react-hot-toast";
 
@@ -20,6 +20,9 @@ export default function JobsPage() {
           const j = await contract.getJob(id);
           let ipfsData = null;
           try { ipfsData = await fetchFromIPFS(j.cid); } catch {}
+          
+          const verification = ipfsData ? verifyIntegrity(ipfsData, j.dataHash) : { valid: false };
+          
           return {
             id: j.id.toString(),
             cid: j.cid,
@@ -30,8 +33,9 @@ export default function JobsPage() {
             isSuspicious: j.isSuspicious,
             isActive: j.isActive,
             ipfsData,
+            verifyStatus: verification.valid ? "valid" : "invalid",
           };
-        } catch { return null; }
+          } catch { return null; }
       });
       const results = (await Promise.all(jobPromises)).filter(Boolean);
       setJobs(results.reverse()); // newest first
@@ -59,7 +63,7 @@ export default function JobsPage() {
   };
 
   const filtered = jobs.filter(j => {
-    if (filter === "verified")   return !j.isSuspicious;
+    if (filter === "verified")   return j.verifyStatus === "valid" && !j.isSuspicious;
     if (filter === "suspicious") return j.isSuspicious;
     return true;
   });
@@ -74,10 +78,10 @@ export default function JobsPage() {
             <div className="w-2 h-2 rounded-full bg-cyber-green animate-pulse" />
             <span className="font-mono text-xs text-cyber-green tracking-widest uppercase">Blockchain-Verified Jobs</span>
           </div>
-          <h1 className="font-display text-4xl md:text-5xl font-bold text-white mb-4">
+          <h1 className="font-display text-4xl md:text-5xl font-bold text-cyber-text mb-4">
             Find <span className="text-cyber-green">Authentic</span> Jobs
           </h1>
-          <p className="text-gray-400 font-body max-w-2xl mx-auto text-lg">
+          <p className="text-gray-600 font-body max-w-2xl mx-auto text-lg">
             Every job posting is verified on Ethereum and stored on IPFS.
             Tamper-proof. Trustless. Transparent.
           </p>
@@ -87,7 +91,7 @@ export default function JobsPage() {
         <div className="grid grid-cols-3 gap-4 mb-10 max-w-2xl mx-auto">
           {[
             { label: "Total Jobs",  value: jobs.length, color: "text-cyber-blue" },
-            { label: "Verified",    value: jobs.filter(j => !j.isSuspicious).length, color: "text-cyber-green" },
+            { label: "Verified",    value: jobs.filter(j => j.verifyStatus === "valid" && !j.isSuspicious).length, color: "text-cyber-green" },
             { label: "Flagged",     value: jobs.filter(j => j.isSuspicious).length,  color: "text-red-400" },
           ].map(s => (
             <div key={s.label} className="text-center p-4 rounded-xl bg-cyber-card border border-cyber-border">
@@ -104,8 +108,8 @@ export default function JobsPage() {
               <button key={f} onClick={() => setFilter(f)}
                 className={`px-4 py-1.5 rounded font-mono text-sm capitalize transition-all ${
                   filter === f
-                    ? "bg-cyber-green text-cyber-dark font-bold"
-                    : "bg-cyber-card text-gray-400 border border-cyber-border hover:border-cyber-green/30"
+                    ? "bg-cyber-green text-white font-bold shadow-lg shadow-cyber-green/20"
+                    : "bg-white text-gray-600 border border-cyber-border hover:border-cyber-green/30"
                 }`}>
                 {f}
               </button>
@@ -126,7 +130,7 @@ export default function JobsPage() {
                   d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
             </div>
-            <h2 className="font-display text-xl text-white mb-2">Connect Your Wallet</h2>
+            <h2 className="font-display text-xl text-cyber-text mb-2">Connect Your Wallet</h2>
             <p className="text-gray-500 mb-6 font-body">View blockchain-verified jobs by connecting MetaMask</p>
             <button onClick={connectWallet} disabled={isConnecting}
               className="px-6 py-3 font-mono font-bold bg-cyber-green text-cyber-dark rounded-lg hover:bg-cyber-green/90 transition-all">
