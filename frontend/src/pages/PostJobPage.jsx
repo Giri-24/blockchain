@@ -87,126 +87,139 @@ export default function PostJobPage() {
   };
 
   if (!account) return (
-    <div className="min-h-screen bg-cyber-dark pt-20 flex items-center justify-center">
-      <p className="text-gray-600 font-mono">Connect your wallet to post jobs.</p>
+    <div className="min-h-screen bg-trust-bg pt-24 text-center px-4 flex items-center justify-center">
+      <div className="max-w-md w-full py-20 bg-white border border-trust-border rounded-[40px] shadow-2xl shadow-indigo-500/5">
+        <div className="text-6xl mb-8">🧱</div>
+        <h2 className="font-display text-3xl font-black text-trust-text mb-3">Connect Identity</h2>
+        <p className="text-trust-subtle font-body mb-8 text-sm max-w-xs mx-auto">Authorize your Ethereum wallet to interact with the job protocol.</p>
+        <div className="mx-8 p-5 bg-indigo-50 border border-indigo-100 rounded-2xl font-mono text-[10px] font-bold text-indigo-600 uppercase tracking-widest">
+          Wallet Signature Required
+        </div>
+      </div>
     </div>
   );
 
   if (!isVerifiedRecruiter) return (
-    <div className="min-h-screen bg-cyber-dark pt-20 flex items-center justify-center">
-      <div className="text-center max-w-md">
-        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-yellow-500/10 border border-yellow-500/30 flex items-center justify-center text-2xl">🔒</div>
-        <h2 className="font-display text-xl text-cyber-text mb-2">Not Verified</h2>
-        <p className="text-gray-600 font-body">Your wallet is not whitelisted as a verified recruiter. Contact the admin to get verified.</p>
+    <div className="min-h-screen bg-trust-bg pt-24 text-center px-4 flex items-center justify-center">
+      <div className="max-w-md w-full py-20 bg-white border border-trust-border rounded-[40px] shadow-2xl shadow-amber-500/5">
+        <div className="text-6xl mb-8">🗳️</div>
+        <h2 className="font-display text-3xl font-black text-trust-text mb-3">Recruiter Access</h2>
+        <p className="text-trust-subtle font-body mb-8 text-sm max-w-xs mx-auto">Your identity is not currently authorized as a verified recruiter on the network.</p>
+        <div className="mx-8 p-5 bg-amber-50 border border-amber-100 rounded-2xl font-mono text-[10px] font-bold text-amber-600 uppercase tracking-widest leading-relaxed">
+          Authorization Key Pending
+        </div>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-cyber-dark bg-grid-pattern bg-grid pt-20">
-      <div className="max-w-2xl mx-auto px-4 py-10">
+    <div className="min-h-screen bg-trust-bg pt-24">
+      <div className="max-w-2xl mx-auto px-4 py-12">
 
-        <h1 className="font-display text-3xl font-bold text-cyber-text mb-2">Post a Job</h1>
-        <p className="text-gray-500 font-mono text-sm mb-8">
-          Job data → IPFS → Blockchain. Tamper-proof & immutable.
+        <h1 className="font-display text-4xl font-black text-trust-text mb-2">Publish Job</h1>
+        <p className="text-trust-subtle font-mono text-[11px] font-bold uppercase tracking-widest mb-10">
+          Sync to IPFS & Decentralized Ledger
         </p>
 
         {/* Progress */}
-        <div className="flex items-center gap-2 mb-8">
-          {["Fill Details", "Upload to IPFS", "Post On-Chain"].map((label, i) => (
+        <div className="flex items-center gap-2 mb-12">
+          {["Details", "IPFS Sync", "On-Chain"].map((label, i) => (
             <React.Fragment key={i}>
-              <div className="flex items-center gap-2">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-mono text-sm font-bold
-                  ${step > i + 1 ? "bg-cyber-green text-cyber-dark" :
-                    step === i + 1 ? "bg-cyber-green/20 border-2 border-cyber-green text-cyber-green" :
-                    "bg-cyber-card border border-cyber-border text-gray-600"}`}>
+              <div className="flex items-center gap-3">
+                <div className={`w-10 h-10 rounded-2xl flex items-center justify-center font-mono text-sm font-black transition-all duration-500
+                  ${step > i + 1 ? "bg-trust-accent text-white shadow-lg shadow-trust-accent/20" :
+                    step === i + 1 ? "bg-trust-accent/10 border-2 border-trust-accent text-trust-accent scale-110" :
+                    "bg-white border border-trust-border text-trust-muted"}`}>
                   {step > i + 1 ? "✓" : i + 1}
                 </div>
-                <span className={`font-mono text-xs hidden sm:inline ${step >= i + 1 ? "text-cyber-text font-bold" : "text-gray-500"}`}>
+                <span className={`font-mono text-[10px] font-black uppercase tracking-[0.15em] hidden sm:inline ${step >= i + 1 ? "text-trust-text" : "text-trust-muted"}`}>
                   {label}
                 </span>
               </div>
-              {i < 2 && <div className={`flex-1 h-px ${step > i + 1 ? "bg-cyber-green" : "bg-cyber-border"}`} />}
+              {i < 2 && <div className={`flex-1 h-0.5 rounded-full mx-2 ${step > i + 1 ? "bg-trust-accent" : "bg-trust-border"}`} />}
             </React.Fragment>
           ))}
         </div>
 
         {/* Step 1 */}
         {step === 1 && (
-          <form onSubmit={handleUpload} className="space-y-5">
-            <div className="p-6 rounded-xl bg-cyber-card border border-cyber-border space-y-4">
-              <h2 className="font-display text-sm uppercase tracking-wide text-gray-400">Job Details</h2>
-              <Field label="Job Title*" name="title" value={form.title} onChange={handleChange} required placeholder="e.g. Senior React Developer" />
-              <Field label="Company Name*" name="company" value={form.company} onChange={handleChange} required placeholder="e.g. TechCorp India" />
-              <div className="grid grid-cols-2 gap-4">
-                <Field label="Location*" name="location" value={form.location} onChange={handleChange} required placeholder="e.g. Remote / Bangalore" />
+          <form onSubmit={handleUpload} className="space-y-6">
+            <div className="p-8 rounded-[32px] bg-white border border-trust-border shadow-sm space-y-6">
+              <h2 className="font-display text-[10px] font-black text-trust-text uppercase tracking-[0.2em] mb-2 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-trust-accent" /> Professional Profile
+              </h2>
+              <Field label="Job Designation" name="title" value={form.title} onChange={handleChange} required placeholder="e.g. Principal Systems Architect" />
+              <Field label="Enterprise Entity" name="company" value={form.company} onChange={handleChange} required placeholder="e.g. Global Tech Solutions" />
+              <div className="grid grid-cols-2 gap-6">
+                <Field label="Zone / HQ" name="location" value={form.location} onChange={handleChange} required placeholder="e.g. Remote / Bangalore" />
                 <div>
-                  <label className="block font-mono text-xs text-gray-400 mb-1.5 uppercase">Job Type</label>
+                  <label className="block font-mono text-[9px] font-black text-trust-muted mb-2 uppercase tracking-widest">Engagement Type</label>
                   <select name="jobType" value={form.jobType} onChange={handleChange}
-                    className="w-full px-3 py-2.5 bg-gray-50 border border-cyber-border text-cyber-text font-mono text-sm rounded-lg focus:outline-none focus:border-cyber-green/50">
+                    className="w-full px-5 py-3.5 bg-trust-border/10 border border-trust-border text-trust-text font-mono text-xs font-bold rounded-2xl focus:outline-none focus:border-trust-accent/50 focus:ring-4 focus:ring-trust-accent/5 transition-all">
                     {JOB_TYPES.map(t => <option key={t} value={t} className="bg-white">{t}</option>)}
                   </select>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <Field label="Salary Range" name="salary" value={form.salary} onChange={handleChange} placeholder="e.g. ₹8-12 LPA" />
-                <Field label="Experience" name="experience" value={form.experience} onChange={handleChange} placeholder="e.g. 2-4 years" />
+              <div className="grid grid-cols-2 gap-6">
+                <Field label="Comp Package" name="salary" value={form.salary} onChange={handleChange} placeholder="e.g. ₹25-40 LPA" />
+                <Field label="Tenure Required" name="experience" value={form.experience} onChange={handleChange} placeholder="e.g. 5+ years" />
               </div>
-              <Field label="Contact Email*" name="contactEmail" value={form.contactEmail} onChange={handleChange} required type="email" placeholder="hr@company.com" />
-              <Field label="Official Job Link (e.g. LinkedIn)*" name="officialUrl" value={form.officialUrl} onChange={handleChange} required type="url" placeholder="https://linkedin.com/jobs/view/1234" />
+              <Field label="Authorized Contact" name="contactEmail" value={form.contactEmail} onChange={handleChange} required type="email" placeholder="recruitment@entity.com" />
+              <Field label="Official Posting URL" name="officialUrl" value={form.officialUrl} onChange={handleChange} required type="url" placeholder="https://portal.company.com/career/123" />
             </div>
 
-            <div className="p-6 rounded-xl bg-cyber-card border border-cyber-border space-y-4">
-              <h2 className="font-display text-sm uppercase tracking-wide text-gray-400">Description</h2>
-              <Textarea label="Job Description*" name="description" value={form.description} onChange={handleChange} required rows={4} placeholder="Describe the role and responsibilities..." />
-              <Textarea label="Requirements" name="requirements" value={form.requirements} onChange={handleChange} rows={3} placeholder="List qualifications and requirements..." />
-              <Field label="Skills (comma-separated)" name="skills" value={form.skills} onChange={handleChange} placeholder="React, Node.js, MongoDB, AWS" />
+            <div className="p-8 rounded-[32px] bg-white border border-trust-border shadow-sm space-y-6">
+              <h2 className="font-display text-[10px] font-black text-trust-text uppercase tracking-[0.2em] mb-2 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-trust-accent" /> Opportunity Scope
+              </h2>
+              <Textarea label="Role Intelligence" name="description" value={form.description} onChange={handleChange} required rows={5} placeholder="Define the core mission and impact of this role..." />
+              <Textarea label="Capability Requirements" name="requirements" value={form.requirements} onChange={handleChange} rows={4} placeholder="List explicit technical and professional requirements..." />
+              <Field label="Core Competencies (CSV)" name="skills" value={form.skills} onChange={handleChange} placeholder="EVM, Solidity, Rust, Cryptography" />
             </div>
 
             <button type="submit" disabled={uploading}
-              className="w-full py-3 font-mono font-bold bg-cyber-green text-cyber-dark rounded-xl hover:bg-cyber-green/90 disabled:opacity-50 transition-all">
-              {uploading ? "Uploading to IPFS..." : "Upload to IPFS →"}
+              className="w-full py-5 font-mono text-[11px] font-black uppercase tracking-widest bg-trust-primary text-white rounded-[24px] hover:shadow-2xl hover:shadow-trust-primary/30 disabled:opacity-50 transition-all">
+              {uploading ? "Encrypting Segment..." : "Authorize IPFS Deployment →"}
             </button>
           </form>
         )}
 
         {/* Step 2 */}
         {step === 2 && txData && (
-          <div className="space-y-5">
-            <div className="p-6 rounded-xl bg-cyber-card border border-cyber-green/30">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-full bg-cyber-green/20 flex items-center justify-center text-cyber-green">✓</div>
-                <h2 className="font-display text-white font-semibold">IPFS Upload Successful</h2>
+          <div className="space-y-6">
+            <div className="p-8 rounded-[32px] bg-white border border-trust-primary/20 shadow-xl shadow-trust-primary/5">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-12 h-12 rounded-2xl bg-trust-primary/10 flex items-center justify-center text-trust-primary shadow-inner">✓</div>
+                <h2 className="font-display text-xl font-black text-trust-text">IPFS Sync Complete</h2>
               </div>
-              <div className="space-y-3">
-                <InfoBlock label="IPFS CID" value={txData.cid} />
-                <InfoBlock label="SHA-256 Hash" value={txData.hash} />
-                <InfoBlock label="IPFS Gateway" value={`gateway.pinata.cloud/ipfs/${txData.cid.slice(0,20)}...`} />
+              <div className="space-y-4">
+                <InfoBlock label="Decentralized CID" value={txData.cid} />
+                <InfoBlock label="Cryptographic Signature" value={txData.hash} />
               </div>
             </div>
 
-            <div className="p-5 rounded-xl bg-yellow-500/10 border border-yellow-500/30">
-              <p className="font-mono text-sm text-yellow-400">
-                ⛽ This transaction requires gas (SepoliaETH). Your MetaMask will prompt for confirmation.
+            <div className="p-6 rounded-2xl bg-indigo-50 border border-indigo-100">
+              <p className="font-mono text-[10px] font-black text-indigo-600 uppercase tracking-widest leading-relaxed">
+                ⛽ Ethereum Transaction Pending: Gas fee required (SepoliaETH) via MetaMask.
               </p>
             </div>
 
             <button onClick={handlePostOnChain} disabled={posting}
-              className="w-full py-3 font-mono font-bold bg-cyber-green text-cyber-dark rounded-xl hover:bg-cyber-green/90 disabled:opacity-50 transition-all">
-              {posting ? "Waiting for blockchain..." : "Post to Ethereum Blockchain →"}
+              className="w-full py-5 font-mono text-[11px] font-black uppercase tracking-widest bg-trust-accent text-white rounded-[24px] hover:shadow-2xl hover:shadow-trust-accent/30 disabled:opacity-50 transition-all">
+              {posting ? "Synchronizing Chain..." : "Finalize On-Chain Ledger →"}
             </button>
           </div>
         )}
 
         {/* Step 3 */}
         {step === 3 && (
-          <div className="text-center py-12">
-            <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-cyber-green/20 border-2 border-cyber-green flex items-center justify-center text-3xl">
-              🎉
+          <div className="text-center py-20">
+            <div className="w-24 h-24 mx-auto mb-8 rounded-[32px] bg-white border border-trust-primary/20 flex items-center justify-center text-4xl shadow-2xl shadow-trust-primary/10">
+              💎
             </div>
-            <h2 className="font-display text-2xl font-bold text-cyber-text mb-2">Job Posted!</h2>
-            <p className="text-gray-600 font-mono">Your job is now live on the Ethereum blockchain</p>
-            <p className="text-gray-600 font-mono text-sm mt-2">Redirecting to My Jobs...</p>
+            <h2 className="font-display text-4xl font-black text-trust-text mb-3">Ledger Updated</h2>
+            <p className="text-trust-subtle font-mono text-[11px] font-black uppercase tracking-widest">Job hash immortalized on-chain</p>
+            <p className="text-trust-muted font-body text-sm mt-8 animate-pulse">Redirecting to Private Registry...</p>
           </div>
         )}
       </div>
@@ -216,31 +229,29 @@ export default function PostJobPage() {
 
 function Field({ label, name, value, onChange, required, type = "text", placeholder }) {
   return (
-    <div>
-      <label className="block font-mono text-xs text-gray-400 mb-1.5 uppercase">{label}</label>
+    <div className="space-y-2">
+      <label className="block font-mono text-[9px] font-black text-trust-muted uppercase tracking-widest">{label}</label>
       <input type={type} name={name} value={value} onChange={onChange} required={required} placeholder={placeholder}
-        className="w-full px-3 py-2.5 bg-gray-50 border border-cyber-border text-cyber-text font-mono text-sm rounded-lg placeholder-gray-400
-          focus:outline-none focus:border-cyber-green/50 transition-colors" />
+        className="w-full px-5 py-3.5 bg-trust-border/10 border border-trust-border text-trust-text font-mono text-xs font-bold rounded-2xl placeholder-trust-muted/40 focus:outline-none focus:border-trust-accent/50 focus:ring-4 focus:ring-trust-accent/5 transition-all" />
     </div>
   );
 }
 
 function Textarea({ label, name, value, onChange, required, rows, placeholder }) {
   return (
-    <div>
-      <label className="block font-mono text-xs text-gray-400 mb-1.5 uppercase">{label}</label>
+    <div className="space-y-2">
+      <label className="block font-mono text-[9px] font-black text-trust-muted uppercase tracking-widest">{label}</label>
       <textarea name={name} value={value} onChange={onChange} required={required} rows={rows} placeholder={placeholder}
-        className="w-full px-3 py-2.5 bg-gray-50 border border-cyber-border text-cyber-text font-mono text-sm rounded-lg placeholder-gray-400
-          focus:outline-none focus:border-cyber-green/50 transition-colors resize-none" />
+        className="w-full px-5 py-3.5 bg-trust-border/10 border border-trust-border text-trust-text font-mono text-xs font-bold rounded-2xl placeholder-trust-muted/40 focus:outline-none focus:border-trust-accent/50 focus:ring-4 focus:ring-trust-accent/5 transition-all resize-none" />
     </div>
   );
 }
 
 function InfoBlock({ label, value }) {
   return (
-    <div>
-      <p className="font-mono text-xs text-gray-500 uppercase mb-1">{label}</p>
-      <div className="p-2 bg-gray-100 rounded font-mono text-xs text-cyber-green break-all">{value}</div>
+    <div className="p-5 bg-trust-border/20 rounded-2xl border border-trust-border/40">
+      <p className="font-mono text-[9px] font-black text-trust-muted uppercase tracking-widest mb-2">{label}</p>
+      <div className="font-mono text-[10px] font-bold text-trust-primary break-all leading-relaxed">{value}</div>
     </div>
   );
 }

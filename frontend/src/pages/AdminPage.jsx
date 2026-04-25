@@ -101,12 +101,14 @@ export default function AdminPage() {
   );
 
   if (!isOwner) return (
-    <div className="min-h-screen bg-cyber-dark pt-20 flex items-center justify-center">
-      <div className="text-center">
-        <div className="text-4xl mb-4">🚫</div>
-        <h2 className="font-display text-xl text-cyber-text mb-2">Access Denied</h2>
-        <p className="text-gray-600 font-mono">This panel is restricted to the contract owner.</p>
-        <p className="font-mono text-xs text-gray-500 mt-2">Your address: {account}</p>
+    <div className="min-h-screen bg-trust-bg pt-24 text-center px-4 flex items-center justify-center">
+      <div className="max-w-md w-full py-20 bg-white border border-trust-border rounded-[40px] shadow-2xl shadow-indigo-500/5">
+        <div className="text-6xl mb-8">🛡️</div>
+        <h2 className="font-display text-3xl font-black text-trust-text mb-3">Authority Required</h2>
+        <p className="text-trust-subtle font-body mb-8 text-sm max-w-xs mx-auto">This secure governance terminal is reserved exclusively for the contract archon.</p>
+        <div className="mx-8 p-5 bg-indigo-50/50 border border-indigo-100 rounded-2xl font-mono text-[10px] font-bold text-indigo-600 uppercase tracking-widest">
+          Auth Key Missing or Invalid
+        </div>
       </div>
     </div>
   );
@@ -114,13 +116,13 @@ export default function AdminPage() {
   const suspicious = allJobs.filter(j => j.isSuspicious);
 
   return (
-    <div className="min-h-screen bg-cyber-dark bg-grid-pattern bg-grid pt-20">
-      <div className="max-w-6xl mx-auto px-4 py-10">
+    <div className="min-h-screen bg-trust-bg pt-24">
+      <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="flex items-center gap-3 mb-2">
-          <span className="px-2.5 py-1 font-mono text-xs bg-purple-500/20 text-purple-600 border border-purple-500/40 rounded">ADMIN</span>
-          <h1 className="font-display text-3xl font-bold text-cyber-text">Control Panel</h1>
+          <span className="px-3 py-1 font-mono text-[10px] font-black bg-indigo-50 text-indigo-600 border border-indigo-100 rounded-lg uppercase tracking-wider">NETWORK ADMIN</span>
+          <h1 className="font-display text-4xl font-black text-trust-text">Governance</h1>
         </div>
-        <p className="text-gray-500 font-mono text-sm mb-8">Manage recruiters and monitor fraud</p>
+        <p className="text-trust-subtle font-mono text-[11px] font-bold uppercase tracking-widest mb-10">Manage trust anchors and network integrity</p>
 
         {/* Stats Row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
@@ -139,17 +141,17 @@ export default function AdminPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* Verify Recruiter */}
-          <div className="p-6 rounded-xl bg-cyber-card border border-cyber-border">
-            <h2 className="font-display text-base font-semibold text-cyber-text uppercase tracking-wide mb-4">
-              ✅ Verify Recruiter
+          <div className="p-8 rounded-3xl bg-white border border-trust-border shadow-sm">
+            <h2 className="font-display text-xs font-black text-trust-text uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-trust-accent" /> Whitelist Recruiter
             </h2>
-            <form onSubmit={handleVerify} className="space-y-3">
+            <form onSubmit={handleVerify} className="space-y-4">
               <input value={recruiterAddr} onChange={e => setRecruiterAddr(e.target.value)}
                 placeholder="0x... wallet address"
-                className="w-full px-3 py-2.5 bg-gray-50 border border-cyber-border text-cyber-text font-mono text-sm rounded-lg placeholder-gray-400 focus:outline-none focus:border-cyber-green/50" />
+                className="w-full px-5 py-3.5 bg-trust-border/20 border border-trust-border text-trust-text font-mono text-xs font-bold rounded-2xl placeholder-trust-muted focus:outline-none focus:border-trust-accent/50 focus:ring-4 focus:ring-trust-accent/5 transition-all" />
               <button type="submit" disabled={verifying || !recruiterAddr}
-                className="w-full py-2.5 font-mono text-sm font-bold bg-cyber-green text-cyber-dark rounded-lg hover:bg-cyber-green/90 disabled:opacity-50 transition-all">
-                {verifying ? "Verifying..." : "Whitelist Recruiter"}
+                className="w-full py-4 font-mono text-[11px] font-black uppercase tracking-widest bg-trust-accent text-white rounded-2xl hover:shadow-xl hover:shadow-trust-accent/20 disabled:opacity-50 transition-all">
+                {verifying ? "Authorizing..." : "Grant Verification"}
               </button>
             </form>
           </div>

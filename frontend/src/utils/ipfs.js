@@ -7,12 +7,31 @@ const PINATA_BASE_URL   = "https://api.pinata.cloud";
 const IPFS_GATEWAY      = "https://gateway.pinata.cloud/ipfs";
 
 /**
+ * Canonical JSON stringification (sorts keys alphabetically)
+ * @param {Object} obj
+ * @returns {string}
+ */
+export function canonicalStringify(obj) {
+  if (obj === null || typeof obj !== "object") {
+    return JSON.stringify(obj);
+  }
+  if (Array.isArray(obj)) {
+    return "[" + obj.map(canonicalStringify).join(",") + "]";
+  }
+  const sortedKeys = Object.keys(obj).sort();
+  const result = "{" + sortedKeys.map(key => {
+    return JSON.stringify(key) + ":" + canonicalStringify(obj[key]);
+  }).join(",") + "}";
+  return result;
+}
+
+/**
  * Upload JSON data to IPFS via Pinata
  * @param {Object} jobData - Job data to upload
  * @returns {{ cid: string, hash: string }} IPFS CID and SHA-256 hash
  */
 export async function uploadToIPFS(jobData) {
-  const jsonString = JSON.stringify(jobData, null, 2);
+  const jsonString = canonicalStringify(jobData);
   const hash = computeHash(jsonString);
 
   // Add hash to the data for self-verification
@@ -93,11 +112,18 @@ export function hashToBytes32(hexHash) {
  * @returns {{ valid: boolean, computedHash: string }}
  */
 export function verifyIntegrity(jobData, storedHash) {
-  // Remove the integrity field before re-hashing (it's metadata)
+  // Remove the integrity field before re-hashing
   const { integrity, ...coreData } = jobData;
-  const jsonString = JSON.stringify(coreData, null, 2);
+  const jsonString = canonicalStringify(coreData);
   const computedHex = computeHash(jsonString);
   const computedBytes32 = hashToBytes32(computedHex);
+
+  console.log("🔍 Integrity Check:", {
+    cid: jobData.cid,
+    computed: computedBytes32,
+    stored: storedHash,
+    equal: computedBytes32.toLowerCase() === storedHash.toLowerCase()
+  });
 
   return {
     valid: computedBytes32.toLowerCase() === storedHash.toLowerCase(),

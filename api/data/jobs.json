@@ -1,0 +1,45 @@
+[
+  {
+    "title": "Senior Blockchain Engineer",
+    "company": "DecentraHire",
+    "location": "Remote",
+    "jobType": "Full-time",
+    "salary": "$120k - $180k",
+    "experience": "5+ years",
+    "description": "We are looking for a Senior Blockchain Engineer to build out our decentralized infrastructure.",
+    "requirements": "Solid understanding of EVM, Solidity, and Ethers.js.",
+    "skills": [
+      "Solidity",
+      "Ethers.js",
+      "React",
+      "Node.js"
+    ],
+    "officialUrl": "https://example.com/jobs/1",
+    "postedBy": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+    "postedAt": "2026-04-25T18:23:08.742Z",
+    "cid": "QmSeed1ce7694eba159db318951bb7a622f762d19c14d7",
+    "ipfsHash": "QmSeed1ce7694eba159db318951bb7a622f762d19c14d7",
+    "backendTimestamp": "2026-04-25T18:23:08.841Z"
+  },
+  {
+    "title": "Frontend Developer (React)",
+    "company": "Web3Labs",
+    "location": "Bangalore, India",
+    "jobType": "Contract",
+    "salary": "₹20L - ₹35L",
+    "experience": "2-4 years",
+    "description": "Join our team to build beautiful Web3 dashboards.",
+    "requirements": "Proficient in React, Tailwind CSS, and Framer Motion.",
+    "skills": [
+      "React",
+      "Tailwind",
+      "Framer Motion"
+    ],
+    "officialUrl": "https://example.com/jobs/2",
+    "postedBy": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+    "postedAt": "2026-04-25T18:23:08.742Z",
+    "cid": "QmSeed30cf590b97e07ec4c5df00fc0a3ba84882ba0357",
+    "ipfsHash": "QmSeed30cf590b97e07ec4c5df00fc0a3ba84882ba0357",
+    "backendTimestamp": "2026-04-25T18:23:08.891Z"
+  }
+]

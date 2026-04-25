@@ -22,34 +22,34 @@ export default function Navbar() {
   ].filter(l => l.always || l.show);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-cyber-border bg-cyber-dark/90 backdrop-blur-md">
+    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-trust-border bg-trust-bg/70 backdrop-blur-xl transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
-            <div className="relative w-8 h-8">
-              <div className="absolute inset-0 bg-cyber-green rounded rotate-45 opacity-20" />
-              <div className="absolute inset-1 bg-cyber-green rounded rotate-45 opacity-40" />
+          <Link to="/" className="flex items-center gap-3 group">
+            <div className="relative w-10 h-10">
+              <div className="absolute inset-0 bg-trust-accent rounded-xl rotate-12 opacity-10 group-hover:rotate-45 transition-transform duration-500" />
+              <div className="absolute inset-0 bg-trust-accent rounded-xl -rotate-12 opacity-20 group-hover:rotate-90 transition-transform duration-700" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                  <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke="#00ff88" strokeWidth="2"
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2L2 7l10 5l10-5l-10-5zM2 17l10 5l10-5M2 12l10 5l10-5" stroke="currentColor" className="text-trust-accent" strokeWidth="2"
                     strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </div>
             </div>
-            <span className="font-display text-lg font-bold tracking-wider text-cyber-text">
-              TRUST<span className="text-cyber-green">CHAIN</span>
+            <span className="font-display text-xl font-black tracking-tight text-trust-text">
+              TRUST<span className="text-trust-accent">CHAIN</span>
             </span>
           </Link>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden md:flex items-center gap-2">
             {navLinks.map(l => (
               <Link key={l.to} to={l.to}
-                className={`px-4 py-2 rounded font-mono text-sm tracking-wide transition-all ${
+                className={`px-5 py-2 rounded-xl font-mono text-xs font-bold uppercase tracking-widest transition-all ${
                   location.pathname === l.to
-                    ? "text-cyber-green bg-cyber-green/10 border border-cyber-green/30"
-                    : "text-gray-600 hover:text-cyber-text hover:bg-gray-100"
+                    ? "text-trust-accent bg-trust-accent/5 shadow-sm shadow-trust-accent/5 border border-trust-accent/10"
+                    : "text-trust-subtle hover:text-trust-text hover:bg-trust-border"
                 }`}>
                 {l.label}
               </Link>
@@ -57,37 +57,43 @@ export default function Navbar() {
           </div>
 
           {/* Wallet Controls */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-4">
             {isWrongNetwork && (
               <button onClick={switchToSepolia}
-                className="px-3 py-1.5 text-xs font-mono bg-yellow-500/20 text-yellow-400 border border-yellow-500/40 rounded hover:bg-yellow-500/30 transition-all">
+                className="px-4 py-2 text-[10px] font-bold font-mono bg-amber-50 text-amber-600 border border-amber-100 rounded-xl hover:bg-amber-100 transition-all">
                 ⚠ Switch to Sepolia
               </button>
             )}
             {account ? (
               <div className="flex items-center gap-2">
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-cyber-card border border-cyber-border rounded">
-                  <div className="w-2 h-2 rounded-full bg-cyber-green animate-pulse" />
-                  <span className="font-mono text-sm text-gray-600">{shortAddr}</span>
+                <div className="flex items-center gap-3 px-4 py-2 bg-trust-card border border-trust-border rounded-2xl shadow-sm">
+                  <div className="relative">
+                    <div className="w-2.5 h-2.5 rounded-full bg-trust-accent animate-pulse" />
+                    <div className="absolute inset-0 w-2.5 h-2.5 rounded-full bg-trust-accent animate-ping opacity-40" />
+                  </div>
+                  <span className="font-mono text-xs font-bold text-trust-subtle">{shortAddr}</span>
                   {isOwner && (
-                    <span className="px-1.5 py-0.5 text-xs bg-purple-500/20 text-purple-400 border border-purple-500/40 rounded">
+                    <span className="px-2 py-0.5 text-[9px] font-black bg-indigo-50 text-indigo-600 border border-indigo-100 rounded-md">
                       ADMIN
                     </span>
                   )}
                   {isVerifiedRecruiter && !isOwner && (
-                    <span className="px-1.5 py-0.5 text-xs bg-cyber-green/20 text-cyber-green border border-cyber-green/40 rounded">
+                    <span className="px-2 py-0.5 text-[9px] font-black bg-trust-accent/10 text-trust-accent border border-trust-accent/20 rounded-md">
                       RECRUITER
                     </span>
                   )}
                 </div>
                 <button onClick={disconnectWallet}
-                  className="px-3 py-1.5 text-xs font-mono text-red-400 border border-red-500/30 rounded hover:bg-red-500/10 transition-all">
-                  Disconnect
+                  className="p-2 text-trust-muted hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
+                  title="Disconnect Wallet">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  </svg>
                 </button>
               </div>
             ) : (
               <button onClick={connectWallet} disabled={isConnecting}
-                className="px-4 py-2 font-mono text-sm font-semibold text-cyber-dark bg-cyber-green rounded hover:bg-cyber-green/90 disabled:opacity-50 transition-all">
+                className="px-6 py-2.5 font-mono text-xs font-black uppercase tracking-widest text-white bg-trust-primary rounded-2xl hover:shadow-xl hover:shadow-trust-primary/20 disabled:opacity-50 transition-all">
                 {isConnecting ? "Connecting..." : "Connect Wallet"}
               </button>
             )}

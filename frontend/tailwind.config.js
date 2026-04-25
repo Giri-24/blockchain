@@ -13,14 +13,15 @@ module.exports = {
           700: "#0369a1",
           900: "#0c4a6e",
         },
-        cyber: {
-          green:  "#10b981", // Emerald 500
-          blue:   "#0ea5e9", // Sky 500
-          purple: "#8b5cf6", // Violet 500
-          dark:   "#ffffff", // Background
-          card:   "#f8fafc", // Card background
-          border: "#e2e8f0", // Border
-          text:   "#0f172a", // Main text
+        trust: {
+          primary:  "#0f172a", // Navy 900
+          accent:   "#10b981", // Emerald 500
+          subtle:   "#64748b", // Slate 500
+          bg:       "#ffffff", // White
+          card:     "#ffffff", // Card 
+          border:   "#f1f5f9", // Slate 100
+          text:     "#0f172a", // Main text
+          muted:    "#94a3b8", // Slate 400
         },
       },
       fontFamily: {

@@ -13,7 +13,7 @@ export default function App() {
   return (
     <Web3Provider>
       <BrowserRouter>
-        <div className="min-h-screen bg-cyber-dark font-body">
+        <div className="min-h-screen bg-trust-bg font-body selection:bg-trust-accent/20">
           <Navbar />
           <Routes>
             <Route path="/"          element={<JobsPage />} />

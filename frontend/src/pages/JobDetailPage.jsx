@@ -70,16 +70,18 @@ export default function JobDetailPage() {
   };
 
   if (loading) return (
-    <div className="min-h-screen bg-cyber-dark pt-20 flex items-center justify-center">
-      <div className="font-mono text-cyber-green animate-pulse">Loading job data...</div>
+    <div className="min-h-screen bg-trust-bg pt-24 flex items-center justify-center">
+      <div className="font-mono text-trust-accent animate-pulse font-black uppercase tracking-[0.3em] text-xs">Synchronizing Ledger...</div>
     </div>
   );
 
   if (!job) return (
-    <div className="min-h-screen bg-cyber-dark pt-20 flex items-center justify-center">
-      <div className="text-center">
-        <p className="text-red-400 font-mono mb-4">Job not found</p>
-        <Link to="/" className="text-cyber-green font-mono">← Back to Jobs</Link>
+    <div className="min-h-screen bg-trust-bg pt-24 flex items-center justify-center text-center px-4">
+      <div className="max-w-md w-full py-16 bg-white border border-trust-border rounded-3xl shadow-sm">
+        <p className="text-red-500 font-mono font-black uppercase tracking-widest text-xs mb-4">Null Pointer: Job Not Found</p>
+        <Link to="/" className="inline-flex items-center gap-2 text-trust-accent hover:underline font-mono text-[10px] font-black uppercase tracking-widest">
+          ← Return to Terminal
+        </Link>
       </div>
     </div>
   );
@@ -87,71 +89,75 @@ export default function JobDetailPage() {
   const date = new Date(Number(job.timestamp) * 1000).toLocaleString();
 
   return (
-    <div className="min-h-screen bg-cyber-dark bg-grid-pattern bg-grid pt-20">
-      <div className="max-w-4xl mx-auto px-4 py-10">
-        <Link to="/" className="inline-flex items-center gap-2 text-gray-600 hover:text-cyber-text font-mono text-sm mb-6 transition-colors">
-          ← Back to Jobs
+    <div className="min-h-screen bg-trust-bg pt-24">
+      <div className="max-w-7xl mx-auto px-4 py-12">
+        <Link to="/" className="inline-flex items-center gap-3 text-trust-subtle hover:text-trust-text transition-colors mb-10 group">
+          <span className="p-2 bg-white rounded-xl border border-trust-border group-hover:bg-trust-border transition-colors">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" /></svg>
+          </span>
+          <span className="font-mono text-[10px] font-black uppercase tracking-[0.2em]">Return to Open Market</span>
         </Link>
 
         {/* Suspicious Warning */}
         {job.isSuspicious && (
-          <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/40 flex items-start gap-3">
-            <span className="text-2xl mt-0.5">⚠️</span>
+          <div className="mb-10 p-6 rounded-[32px] bg-red-50 border border-red-100 flex items-start gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-red-100 flex items-center justify-center text-red-500 text-xl shadow-inner">⚠️</div>
             <div>
-              <p className="font-display text-red-400 font-semibold">This job has been flagged as suspicious</p>
-              <p className="font-mono text-sm text-red-400/70 mt-1">
-                {job.reportCount} users have reported this posting. Exercise caution before applying.
+              <p className="font-display text-red-600 font-black text-lg">Trust Violation Detected</p>
+              <p className="font-mono text-[11px] font-bold text-red-500/70 mt-1 uppercase tracking-tight leading-relaxed">
+                {job.reportCount} community reports filed. Potential fraudulent activity on the employment layer.
               </p>
             </div>
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
           {/* Main content */}
-          <div className="lg:col-span-2 space-y-6">
-            <div className="p-6 rounded-xl bg-cyber-card border border-cyber-border">
-              <h1 className="font-display text-2xl font-bold text-cyber-text mb-1">
+          <div className="lg:col-span-8 space-y-10">
+            <div className="p-10 rounded-[32px] bg-white border border-trust-border shadow-2xl shadow-slate-200/20">
+              <h1 className="font-display text-4xl font-black text-trust-text mb-4 leading-tight">
                 {ipfsData?.title || "Job #" + id}
               </h1>
-              <p className="text-gray-600 font-body text-lg mb-4">{ipfsData?.company}</p>
+              <p className="text-trust-subtle font-body text-xl mb-10">{ipfsData?.company}</p>
               
-              {ipfsData?.officialUrl && (
-                <div className="mb-6">
-                  {account ? (
-                    <a href={ipfsData.officialUrl} target="_blank" rel="noopener noreferrer"
-                      className="inline-block px-6 py-2.5 font-mono font-bold bg-cyber-green text-cyber-dark rounded-lg hover:bg-cyber-green/90 transition-all shadow-lg shadow-cyber-green/20">
-                      Apply on Official Website ↗
-                    </a>
-                  ) : (
-                    <button onClick={connectWallet}
-                      className="inline-block px-6 py-2.5 font-mono font-bold bg-transparent border-2 border-cyber-green text-cyber-green rounded-lg hover:bg-cyber-green/10 transition-all">
-                      Connect Wallet to Apply
-                    </button>
-                  )}
-                </div>
-              )}
-
-              <div className="flex flex-wrap gap-3 mb-4">
+              <div className="flex flex-wrap gap-4 mb-12">
                 {[
                   { icon: "📍", val: ipfsData?.location },
                   { icon: "⏰", val: ipfsData?.jobType },
                   { icon: "💰", val: ipfsData?.salary },
                   { icon: "🏢", val: ipfsData?.experience },
                 ].filter(x => x.val).map(({ icon, val }) => (
-                  <span key={val} className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full font-mono text-sm">
-                    {icon} {val}
+                  <span key={val} className="px-5 py-3 bg-trust-border/20 border border-trust-border rounded-2xl font-mono text-[10px] font-black uppercase tracking-widest flex items-center gap-3">
+                    <span className="opacity-60 grayscale">{icon}</span> {val}
                   </span>
                 ))}
               </div>
+
+              {ipfsData?.officialUrl && (
+                <div className="mb-2">
+                  {account ? (
+                    <a href={ipfsData.officialUrl} target="_blank" rel="noopener noreferrer"
+                      className="inline-flex items-center gap-4 px-10 py-5 font-mono text-xs font-black uppercase tracking-[0.2em] bg-trust-primary text-white rounded-[24px] hover:shadow-2xl hover:shadow-trust-primary/40 transition-all group">
+                      Initialize Application 
+                      <span className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">↗</span>
+                    </a>
+                  ) : (
+                    <button onClick={connectWallet}
+                      className="inline-flex items-center gap-4 px-10 py-5 font-mono text-xs font-black uppercase tracking-[0.2em] bg-white border-2 border-trust-accent text-trust-accent rounded-[24px] hover:bg-trust-accent hover:text-white transition-all">
+                      Unlock Secure Gate
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Description */}
             {ipfsData?.description && (
-              <div className="p-6 rounded-xl bg-cyber-card border border-cyber-border">
-                <h2 className="font-display text-base font-semibold text-cyber-text mb-3 uppercase tracking-wide">
-                  Job Description
+              <div className="p-10 rounded-[32px] bg-white border border-trust-border">
+                <h2 className="font-display text-[10px] font-black text-trust-text uppercase tracking-[0.2em] mb-6 flex items-center gap-3">
+                  <span className="w-4 h-0.5 bg-trust-accent" /> Opportunity Brief
                 </h2>
-                <p className="text-gray-600 font-body leading-relaxed whitespace-pre-wrap">
+                <p className="text-trust-subtle font-body leading-loose text-lg whitespace-pre-wrap">
                   {ipfsData.description}
                 </p>
               </div>
@@ -159,11 +165,11 @@ export default function JobDetailPage() {
 
             {/* Requirements */}
             {ipfsData?.requirements && (
-              <div className="p-6 rounded-xl bg-cyber-card border border-cyber-border">
-                <h2 className="font-display text-base font-semibold text-cyber-text mb-3 uppercase tracking-wide">
-                  Requirements
+              <div className="p-10 rounded-[32px] bg-white border border-trust-border">
+                <h2 className="font-display text-[10px] font-black text-trust-text uppercase tracking-[0.2em] mb-6 flex items-center gap-3">
+                  <span className="w-4 h-0.5 bg-trust-accent" /> Mandatory Prerequisites
                 </h2>
-                <p className="text-gray-600 font-body leading-relaxed whitespace-pre-wrap">
+                <p className="text-trust-subtle font-body leading-loose text-lg whitespace-pre-wrap">
                   {ipfsData.requirements}
                 </p>
               </div>
@@ -171,11 +177,13 @@ export default function JobDetailPage() {
 
             {/* Skills */}
             {ipfsData?.skills?.length > 0 && (
-              <div className="p-6 rounded-xl bg-cyber-card border border-cyber-border">
-                <h2 className="font-display text-base font-semibold text-cyber-text mb-3 uppercase tracking-wide">Skills</h2>
-                <div className="flex flex-wrap gap-2">
+              <div className="p-10 rounded-[32px] bg-white border border-trust-border">
+                <h2 className="font-display text-[10px] font-black text-trust-text uppercase tracking-[0.2em] mb-6 flex items-center gap-3">
+                  <span className="w-4 h-0.5 bg-trust-accent" /> Skillset Matrix
+                </h2>
+                <div className="flex flex-wrap gap-3">
                   {ipfsData.skills.map(s => (
-                    <span key={s} className="px-3 py-1 font-mono text-sm bg-cyber-blue/10 text-cyber-blue border border-cyber-blue/20 rounded">
+                    <span key={s} className="px-4 py-2 font-mono text-[10px] font-black uppercase bg-trust-primary/5 text-trust-primary border border-trust-primary/10 rounded-xl">
                       {s}
                     </span>
                   ))}
@@ -185,54 +193,50 @@ export default function JobDetailPage() {
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-4">
+          <div className="lg:col-span-4 space-y-6">
             {/* Integrity Check */}
-            <div className="p-5 rounded-xl bg-cyber-card border border-cyber-border">
-              <h3 className="font-display text-sm font-semibold text-cyber-text uppercase tracking-wide mb-4">
-                Integrity Verification
+            <div className="p-8 rounded-[32px] bg-white border border-trust-border shadow-sm">
+              <h3 className="font-display text-[10px] font-black text-trust-text uppercase tracking-[0.2em] mb-8 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-trust-accent animate-pulse" /> Security Protocol
               </h3>
               {integrity && (
-                <div className={`mb-4 p-3 rounded-lg flex items-center gap-2 font-mono text-sm
+                <div className={`mb-8 p-5 rounded-2xl flex items-center gap-3 font-mono text-[11px] font-bold uppercase tracking-widest
                   ${integrity === "valid"
-                    ? "bg-cyber-green/10 border border-cyber-green/30 text-cyber-green"
-                    : "bg-red-500/10 border border-red-500/30 text-red-400"
+                    ? "bg-emerald-50 border border-emerald-100 text-emerald-600"
+                    : "bg-red-50 border border-red-100 text-red-600"
                   }`}>
-                  <span className="text-lg">{integrity === "valid" ? "✓" : "✗"}</span>
-                  <span>{integrity === "valid" ? "Data is authentic" : "Data has been tampered"}</span>
+                  <span className="text-xl">{integrity === "valid" ? "✓" : "✗"}</span>
+                  <span>{integrity === "valid" ? "Identity Match" : "Hash Collision"}</span>
                 </div>
               )}
               <button onClick={verifyIntegrity} disabled={verifying || !ipfsData}
-                className="w-full py-2.5 font-mono text-sm font-semibold text-cyber-dark bg-cyber-green rounded-lg hover:bg-cyber-green/90 disabled:opacity-50 transition-all">
-                {verifying ? "Verifying..." : "Verify on Blockchain"}
+                className="w-full py-5 font-mono text-[11px] font-black uppercase tracking-widest bg-trust-accent text-white rounded-2xl hover:shadow-xl hover:shadow-trust-accent/20 disabled:opacity-50 transition-all">
+                {verifying ? "Auditing Source..." : "Validate Authenticity"}
               </button>
-              <p className="mt-2 text-xs text-gray-600 font-mono text-center">
-                Compares IPFS data SHA-256 with on-chain hash
-              </p>
             </div>
 
             {/* Blockchain Info */}
-            <div className="p-5 rounded-xl bg-cyber-card border border-cyber-border space-y-3">
-              <h3 className="font-display text-sm font-semibold text-cyber-text uppercase tracking-wide">Blockchain Record</h3>
-              <InfoRow label="Job ID" value={"#" + job.id} />
-              <InfoRow label="Posted" value={date} small />
-              <InfoRow label="Recruiter" value={`${job.recruiter?.slice(0,10)}...`} mono />
-              <InfoRow label="Reports" value={`${job.reportCount} / 5`} color={Number(job.reportCount) > 0 ? "text-red-400" : "text-cyber-green"} />
-              <InfoRow label="Status" value={job.isSuspicious ? "⚠ Suspicious" : "✓ Active"} color={job.isSuspicious ? "text-red-400" : "text-cyber-green"} />
+            <div className="p-8 rounded-[32px] bg-white border border-trust-border space-y-5">
+              <h3 className="font-display text-[10px] font-black text-trust-text uppercase tracking-[0.2em] mb-2">Network Segment</h3>
+              <InfoRow label="Ledger Index" value={"#" + job.id} />
+              <InfoRow label="Timestamp" value={date.split(',')[0]} small />
+              <InfoRow label="Archon" value={`${job.recruiter?.slice(0,8)}...`} mono />
+              <InfoRow label="State" value={job.isSuspicious ? "⚠ Suspicious" : "✓ Active"} color={job.isSuspicious ? "text-red-500" : "text-trust-accent"} />
             </div>
 
             {/* IPFS */}
-            <div className="p-5 rounded-xl bg-cyber-card border border-cyber-border">
-              <h3 className="font-display text-sm font-semibold text-cyber-text uppercase tracking-wide mb-3">IPFS Storage</h3>
+            <div className="p-8 rounded-[32px] bg-white border border-trust-border">
+              <h3 className="font-display text-[10px] font-black text-trust-text uppercase tracking-[0.2em] mb-4">Storage Node</h3>
               <a href={`https://gateway.pinata.cloud/ipfs/${job.cid}`} target="_blank" rel="noopener noreferrer"
-                className="block p-2 bg-gray-100 rounded font-mono text-xs text-cyber-blue hover:text-cyber-text break-all transition-colors">
+                className="block p-4 bg-trust-border/20 rounded-2xl font-mono text-[9px] font-bold text-trust-subtle hover:text-trust-accent break-all transition-colors line-clamp-3">
                 {job.cid}
               </a>
             </div>
 
             {/* Report */}
             <button onClick={reportJob} disabled={reporting || !account}
-              className="w-full py-2.5 font-mono text-sm text-red-400 border border-red-500/30 rounded-lg hover:bg-red-500/10 disabled:opacity-50 transition-all">
-              {reporting ? "Reporting..." : "🚨 Report Fraud"}
+              className="w-full py-4 font-mono text-[10px] font-black uppercase tracking-widest text-red-400 border border-red-200 rounded-2xl hover:bg-red-50 disabled:opacity-50 transition-all">
+              {reporting ? "Filing..." : "🚨 Report Fraud"}
             </button>
           </div>
         </div>
@@ -243,9 +247,9 @@ export default function JobDetailPage() {
 
 function InfoRow({ label, value, mono, small, color }) {
   return (
-    <div className="flex justify-between items-center">
-      <span className="font-mono text-xs text-gray-500 uppercase">{label}</span>
-      <span className={`font-mono text-xs ${color || "text-gray-700"} ${small ? "text-xs" : ""}`}>
+    <div className="flex justify-between items-center py-1">
+      <span className="font-mono text-[9px] font-black text-trust-muted uppercase tracking-widest">{label}</span>
+      <span className={`font-mono text-[10px] font-bold ${color || "text-trust-text"} ${small ? "text-[9px]" : ""}`}>
         {value}
       </span>
     </div>
