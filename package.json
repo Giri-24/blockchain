@@ -1,6 +1,9 @@
 {
   "name": "trustchain-blockchain",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "description": "TrustChain - Fake Job Detection System Smart Contracts",
   "scripts": {
     "build": "npm --prefix frontend install && npm --prefix frontend run build && rm -rf public && cp -r frontend/build public",

@@ -3,10 +3,21 @@ const cors = require('cors');
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
+require('dotenv').config();
+
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+// Root health check for Render
+app.get('/', (req, res) => {
+    res.json({ 
+        status: "online", 
+        service: "TrustChain API",
+        timestamp: new Date().toISOString()
+    });
+});
 
 const JOBS_FILE = path.join(__dirname, 'data', 'jobs.json');
 

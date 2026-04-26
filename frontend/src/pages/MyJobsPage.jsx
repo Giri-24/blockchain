@@ -5,7 +5,7 @@ import { fetchFromIPFS } from "../utils/ipfs";
 import toast from "react-hot-toast";
 
 export default function MyJobsPage() {
-  const { contract, account, isVerifiedRecruiter } = useWeb3();
+  const { contract, account, isOwner, isVerifiedRecruiter } = useWeb3();
   const [jobs, setJobs]     = useState([]);
   const [loading, setLoading] = useState(false);
   const [recruiterInfo, setRecruiterInfo] = useState(null);

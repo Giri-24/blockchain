@@ -9,9 +9,9 @@ services:
       - key: NPM_CONFIG_LEGACY_PEER_DEPS
         value: "true"
       - key: PINATA_KEY
-        generateValue: true
+        sync: false
       - key: PINATA_SECRET
-        generateValue: true
+        sync: false
 
   # The React Frontend
   - type: web
@@ -22,6 +22,11 @@ services:
     envVars:
       - key: NPM_CONFIG_LEGACY_PEER_DEPS
         value: "true"
+      - key: REACT_APP_API_URL
+        fromService:
+          type: web
+          name: trustchain-api
+          property: host
       - key: REACT_APP_PINATA_API_KEY
         sync: false
       - key: REACT_APP_PINATA_SECRET
