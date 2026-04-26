@@ -60,22 +60,51 @@ export function Web3Provider({ children }) {
       // Request accounts
       const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
       const web3Provider = new ethers.BrowserProvider(window.ethereum);
-      const web3Signer = await web3Provider.getSigner();
       const network = await web3Provider.getNetwork();
+      const currentChainId = "0x" + network.chainId.toString(16);
 
+      // ✅ AUTOMATIC NETWORK SWITCH: If not on Sepolia, prompt immediately
+      if (currentChainId !== SEPOLIA_CHAIN_ID) {
+        toast.loading("Switching to Sepolia Testnet...", { id: "net" });
+        try {
+          await window.ethereum.request({
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: SEPOLIA_CHAIN_ID }],
+          });
+          toast.success("Switched to Sepolia", { id: "net" });
+        } catch (switchErr) {
+          if (switchErr.code === 4902) {
+            await window.ethereum.request({
+              method: "wallet_addEthereumChain",
+              params: [{
+                chainId: SEPOLIA_CHAIN_ID,
+                chainName: "Sepolia Testnet",
+                nativeCurrency: { name: "SepoliaETH", symbol: "ETH", decimals: 18 },
+                rpcUrls: ["https://rpc.sepolia.org"],
+                blockExplorerUrls: ["https://sepolia.etherscan.io"],
+              }],
+            });
+            toast.success("Sepolia Network Added", { id: "net" });
+          } else {
+            throw switchErr;
+          }
+        }
+      }
+
+      const web3Signer = await web3Provider.getSigner();
       setProvider(web3Provider);
       setSigner(web3Signer);
       setAccount(accounts[0]);
-      setChainId("0x" + network.chainId.toString(16));
-      setNetworkName(network.name);
+      setChainId(SEPOLIA_CHAIN_ID); // We are now on Sepolia
+      setNetworkName("Sepolia");
 
       const c = initContract(web3Signer);
       if (c) await checkRoles(c, accounts[0]);
 
-      toast.success("Wallet connected!");
+      toast.success("Identity Connected (Sepolia Live)", { id: "net" });
     } catch (err) {
       console.error("Connect error:", err);
-      toast.error(err.message || "Failed to connect wallet");
+      toast.error(err.message || "Connection process interrupted", { id: "net" });
     } finally {
       setIsConnecting(false);
     }

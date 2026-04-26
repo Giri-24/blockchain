@@ -74,14 +74,18 @@ export default function PostJobPage() {
     setPosting(true);
     try {
       const bytes32Hash = hashToBytes32(txData.hash);
-      toast.loading("Posting to blockchain (Awaiting Signature)...", { id: "tx" });
+      toast.loading("Awaiting Signature from MetaMask...", { id: "tx" });
       const tx = await contract.postJob(txData.cid, bytes32Hash, form.company, form.title);
+      
+      toast.loading("Transaction processing on Sepolia...", { id: "tx" });
       await tx.wait();
-      toast.success("Job posted on-chain!", { id: "tx" });
+      
+      toast.success("Job permanently stored on-chain!", { id: "tx" });
       setStep(3);
       setTimeout(() => navigate("/my-jobs"), 2000);
     } catch (err) {
-      toast.error(err.reason || err.message || "Transaction failed", { id: "tx" });
+      console.error("TX Error:", err);
+      toast.error(err.reason || err.message || "Transaction cancelled or failed", { id: "tx" });
     } finally { setPosting(false); }
   };
 

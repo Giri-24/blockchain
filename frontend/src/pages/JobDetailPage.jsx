@@ -59,13 +59,17 @@ export default function JobDetailPage() {
     if (!account) { toast.error("Connect wallet to report"); return; }
     setReporting(true);
     try {
+      toast.loading("Awaiting Signature from MetaMask...", { id: "rpt" });
       const tx = await contract.reportJob(id);
-      toast.loading("Submitting...", { id: "rpt" });
+      
+      toast.loading("Transaction processing on Sepolia...", { id: "rpt" });
       await tx.wait();
-      toast.success("Reported successfully", { id: "rpt" });
+      
+      toast.success("Report permanently stored on-chain", { id: "rpt" });
       loadJob();
     } catch (err) {
-      toast.error(err.reason || "Report failed", { id: "rpt" });
+      console.error("Report Error:", err);
+      toast.error(err.reason || err.message || "Report cancelled or failed", { id: "rpt" });
     } finally { setReporting(false); }
   };
 
