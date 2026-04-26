@@ -27,7 +27,6 @@ export default function PostJobPage() {
 
   const handleUpload = async (e) => {
     e.preventDefault();
-    if (!isVerifiedRecruiter) { toast.error("You are not a verified recruiter"); return; }
 
     const skillsArr = form.skills.split(",").map(s => s.trim()).filter(Boolean);
     const jobData = {
@@ -99,18 +98,7 @@ export default function PostJobPage() {
     </div>
   );
 
-  if (!isVerifiedRecruiter) return (
-    <div className="min-h-screen bg-trust-bg pt-24 text-center px-4 flex items-center justify-center">
-      <div className="max-w-md w-full py-20 bg-white border border-trust-border rounded-[40px] shadow-2xl shadow-amber-500/5">
-        <div className="text-6xl mb-8">🗳️</div>
-        <h2 className="font-display text-3xl font-black text-trust-text mb-3">Recruiter Access</h2>
-        <p className="text-trust-subtle font-body mb-8 text-sm max-w-xs mx-auto">Your identity is not currently authorized as a verified recruiter on the network.</p>
-        <div className="mx-8 p-5 bg-amber-50 border border-amber-100 rounded-2xl font-mono text-[10px] font-bold text-amber-600 uppercase tracking-widest leading-relaxed">
-          Authorization Key Pending
-        </div>
-      </div>
-    </div>
-  );
+  // Unified universal access
 
   return (
     <div className="min-h-screen bg-trust-bg pt-24">
@@ -118,7 +106,7 @@ export default function PostJobPage() {
 
         <h1 className="font-display text-4xl font-black text-trust-text mb-2">Publish Job</h1>
         <p className="text-trust-subtle font-mono text-[11px] font-bold uppercase tracking-widest mb-10">
-          Sync to IPFS & Decentralized Ledger
+          Sync to IPFS & Decentralized Ledger (Universal Access Enabled)
         </p>
 
         {/* Progress */}

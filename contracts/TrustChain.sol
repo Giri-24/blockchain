@@ -130,7 +130,10 @@ contract TrustChain {
     /**
      * @dev Deposit stake as a recruiter (optional but boosts reputation)
      */
-    function depositStake() external payable onlyVerifiedRecruiter {
+    function depositStake() external payable {
+        if (!isVerifiedRecruiter[msg.sender]) {
+            _verifyRecruiter(msg.sender);
+        }
         require(msg.value >= STAKE_AMOUNT, "TrustChain: insufficient stake amount");
         recruiters[msg.sender].stake += msg.value;
         emit StakeDeposited(msg.sender, msg.value);
@@ -143,7 +146,7 @@ contract TrustChain {
      * @param company Company name string (used for duplicate verification)
      * @param title Job title string (used for duplicate verification)
      */
-    function postJob(string memory cid, bytes32 dataHash, string memory company, string memory title) external onlyVerifiedRecruiter {
+    function postJob(string memory cid, bytes32 dataHash, string memory company, string memory title) external {
         require(bytes(cid).length > 0, "TrustChain: CID cannot be empty");
         require(dataHash != bytes32(0), "TrustChain: dataHash cannot be empty");
 
