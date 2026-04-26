@@ -12,68 +12,72 @@ export default function JobsPage() {
 
   const loadJobs = useCallback(async () => {
     try {
-      // 1. Fetch from Backend (Fast Cache)
+      setLoading(true);
+      // 1. Fetch from Backend (Fast Cache) - Always do this first
       let backendJobs = [];
       try {
         const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:3001"}/api/jobs`);
         if (res.ok) backendJobs = await res.json();
       } catch (err) {
-        console.warn("Backend cache fetch failed, falling back to on-chain only:", err);
+        console.warn("Backend cache fetch failed:", err);
       }
 
-      // 2. Fetch all IDs from Blockchain
-      const ids = await contract.getAllJobIds();
+      let blockchainResults = [];
       
-      const jobPromises = ids.map(async (id) => {
+      // 2. Try to Fetch from Blockchain if contract exists
+      if (contract) {
         try {
-          const j = await contract.getJob(id);
-          const jobId = j.id.toString();
-          
-          // Try to find in backend cache first
-          let ipfsData = backendJobs.find(bj => bj.cid === j.cid);
-          
-          if (!ipfsData) {
-            // Fallback: Fetch from IPFS directly
-            try { ipfsData = await fetchFromIPFS(j.cid); } catch { ipfsData = null; }
-          }
-          
-          const verification = ipfsData ? verifyIntegrity(ipfsData, j.dataHash) : { valid: false };
-          
-          return {
-            id: jobId,
-            cid: j.cid,
-            dataHash: j.dataHash,
-            recruiter: j.recruiter,
-            timestamp: j.timestamp.toString(),
-            reportCount: j.reportCount.toString(),
-            isSuspicious: j.isSuspicious,
-            isActive: j.isActive,
-            ipfsData,
-            verifyStatus: verification.valid ? "valid" : "invalid",
-          };
-        } catch (e) {
-          console.error(`Error loading job ${id}:`, e);
-          return null;
+          const ids = await contract.getAllJobIds();
+          const jobPromises = ids.map(async (id) => {
+            try {
+              const j = await contract.getJob(id);
+              const jobId = j.id.toString();
+              
+              let ipfsData = backendJobs.find(bj => bj.cid === j.cid);
+              if (!ipfsData) {
+                try { ipfsData = await fetchFromIPFS(j.cid); } catch { ipfsData = null; }
+              }
+              
+              const verification = ipfsData ? verifyIntegrity(ipfsData, j.dataHash) : { valid: false };
+              
+              return {
+                id: jobId,
+                cid: j.cid,
+                dataHash: j.dataHash,
+                recruiter: j.recruiter,
+                timestamp: j.timestamp.toString(),
+                reportCount: j.reportCount.toString(),
+                isSuspicious: j.isSuspicious,
+                isActive: j.isActive,
+                ipfsData,
+                verifyStatus: verification.valid ? "valid" : "invalid",
+              };
+            } catch (e) {
+              console.error(`Error loading job ${id}:`, e);
+              return null;
+            }
+          });
+          blockchainResults = (await Promise.all(jobPromises)).filter(Boolean);
+        } catch (bcErr) {
+          console.warn("Blockchain fetch failed:", bcErr);
         }
-      });
-
-      // 3. Merge & Deduplicate
-      const blockchainResults = (await Promise.all(jobPromises)).filter(Boolean);
+      }
       
+      // 3. Merge & Deduplicate
       // Find jobs that are in the backend but NOT on-chain yet
       const backendOnlyJobs = backendJobs.filter(bj => 
         !blockchainResults.some(br => br.cid === bj.cid)
       ).map(bj => ({
         id: `pending-${bj.cid.slice(0, 8)}`,
         cid: bj.cid,
-        dataHash: bj.ipfsHash || bj.cid, // Placeholder for backend-only
+        dataHash: bj.ipfsHash || bj.cid, 
         recruiter: bj.postedBy,
         timestamp: bj.postedAt || bj.backendTimestamp,
         reportCount: "0",
         isSuspicious: false,
         isActive: true,
         ipfsData: bj,
-        verifyStatus: "portal-only", // New status
+        verifyStatus: "portal-only",
       }));
 
       const allJobs = [...blockchainResults, ...backendOnlyJobs];
@@ -164,22 +168,7 @@ export default function JobsPage() {
         </div>
 
         {/* Content */}
-        {!account ? (
-          <div className="text-center py-20">
-            <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center">
-              <svg className="w-10 h-10 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-            </div>
-            <h2 className="font-display text-xl text-gray-900 mb-2">Connect Your Wallet</h2>
-            <p className="text-gray-500 mb-6 font-body">View blockchain-verified jobs by connecting MetaMask</p>
-            <button onClick={connectWallet} disabled={isConnecting}
-              className="px-6 py-3 font-mono font-bold bg-trust-accent text-white rounded-lg hover:bg-trust-accent/90 transition-all">
-              {isConnecting ? "Connecting..." : "Connect MetaMask"}
-            </button>
-          </div>
-        ) : loading ? (
+        {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {[...Array(6)].map((_, i) => (
               <div key={i} className="h-52 rounded-xl bg-gray-50 border border-gray-100 animate-pulse" />
