@@ -11,8 +11,6 @@ export default function JobsPage() {
   const [filter, setFilter]   = useState("all"); // all | verified | suspicious
 
   const loadJobs = useCallback(async () => {
-    if (!contract) return;
-    setLoading(true);
     try {
       // 1. Fetch from Backend (Fast Cache)
       let backendJobs = [];
@@ -59,8 +57,27 @@ export default function JobsPage() {
         }
       });
 
-      const results = (await Promise.all(jobPromises)).filter(Boolean);
-      setJobs(results.reverse()); // newest first
+      // 3. Merge & Deduplicate
+      const blockchainResults = (await Promise.all(jobPromises)).filter(Boolean);
+      
+      // Find jobs that are in the backend but NOT on-chain yet
+      const backendOnlyJobs = backendJobs.filter(bj => 
+        !blockchainResults.some(br => br.cid === bj.cid)
+      ).map(bj => ({
+        id: `pending-${bj.cid.slice(0, 8)}`,
+        cid: bj.cid,
+        dataHash: bj.ipfsHash || bj.cid, // Placeholder for backend-only
+        recruiter: bj.postedBy,
+        timestamp: bj.postedAt || bj.backendTimestamp,
+        reportCount: "0",
+        isSuspicious: false,
+        isActive: true,
+        ipfsData: bj,
+        verifyStatus: "portal-only", // New status
+      }));
+
+      const allJobs = [...blockchainResults, ...backendOnlyJobs];
+      setJobs(allJobs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)));
     } catch (err) {
       console.error(err);
       toast.error("Failed to load jobs");

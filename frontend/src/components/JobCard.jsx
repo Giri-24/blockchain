@@ -11,7 +11,9 @@ export default function JobCard({ job, onReport, canReport = true }) {
     isSuspicious, ipfsData, verifyStatus,
   } = job;
 
-  const date   = new Date(Number(timestamp) * 1000).toLocaleDateString();
+  const date = !isNaN(timestamp) 
+    ? new Date(Number(timestamp) * 1000).toLocaleDateString()
+    : new Date(timestamp).toLocaleDateString();
   const title   = ipfsData?.title       || "Loading...";
   const company = ipfsData?.company     || "Unknown";
   const salary  = ipfsData?.salary      || "Not specified";
@@ -44,10 +46,16 @@ export default function JobCard({ job, onReport, canReport = true }) {
         <div className={`absolute top-4 right-4 flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider
           ${verifyStatus === "valid"
             ? "bg-trust-accent/10 text-trust-accent border border-trust-accent/20"
+            : verifyStatus === "portal-only"
+            ? "bg-amber-50 text-amber-600 border border-amber-200"
             : "bg-red-50 text-red-500 border border-red-100"
           }`}>
-          <span className={verifyStatus === "valid" ? "animate-pulse" : ""}>{verifyStatus === "valid" ? "●" : "✗"}</span>
-          <span>{verifyStatus === "valid" ? "Authentic" : "Tampered"}</span>
+          <span className={verifyStatus !== "invalid" ? "animate-pulse" : ""}>
+            {verifyStatus === "valid" ? "●" : verifyStatus === "portal-only" ? "○" : "✗"}
+          </span>
+          <span>
+            {verifyStatus === "valid" ? "Authentic" : verifyStatus === "portal-only" ? "Portal Verified" : "Tampered"}
+          </span>
         </div>
       )}
 
