@@ -105,11 +105,11 @@ export default function JobsPage() {
     }
   };
 
-  const filtered = jobs.filter(j => {
-    if (filter === "verified")   return j.verifyStatus === "valid" && !j.isSuspicious;
-    if (filter === "suspicious") return j.isSuspicious;
-    return true;
-  });
+  const verifiedJobs = jobs.filter(j => (j.verifyStatus === "valid" || j.verifyStatus === "portal-only") && !j.isSuspicious);
+  const suspiciousJobs = jobs.filter(j => j.isSuspicious || j.verifyStatus === "invalid");
+
+  const filteredVerified = filter === "all" || filter === "verified" ? verifiedJobs : [];
+  const filteredSuspicious = filter === "all" || filter === "suspicious" ? suspiciousJobs : [];
 
   return (
     <div className="min-h-screen bg-trust-bg bg-grid-pattern bg-grid pt-24">
@@ -174,17 +174,48 @@ export default function JobsPage() {
               <div key={i} className="h-52 rounded-xl bg-gray-50 border border-gray-100 animate-pulse" />
             ))}
           </div>
-        ) : filtered.length === 0 ? (
-          <div className="text-center py-20">
-            <p className="text-gray-500 font-mono">No jobs found</p>
-          </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-            {filtered.map(job => (
-              <div key={job.id} className="animate-fade-up">
-                <JobCard job={job} onReport={handleReport} canReport={!!account} />
+          <div className="space-y-16">
+            {/* Verified Section */}
+            {filteredVerified.length > 0 && (
+              <section className="animate-fade-up">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="px-3 py-1 bg-trust-accent/10 text-trust-accent border border-trust-accent/20 rounded-lg font-mono text-[10px] font-black uppercase tracking-widest">
+                    Verified Positions
+                  </div>
+                  <div className="h-px flex-1 bg-gradient-to-r from-trust-accent/20 to-transparent" />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {filteredVerified.map(job => (
+                    <JobCard key={job.id} job={job} onReport={handleReport} canReport={!!account} />
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Suspicious Section */}
+            {filteredSuspicious.length > 0 && (
+              <section className="animate-fade-up">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="px-3 py-1 bg-red-50 text-red-500 border border-red-100 rounded-lg font-mono text-[10px] font-black uppercase tracking-widest">
+                    Suspicious / Flagged Postings
+                  </div>
+                  <div className="h-px flex-1 bg-gradient-to-r from-red-200 to-transparent" />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 opacity-80 hover:opacity-100 transition-opacity">
+                  {filteredSuspicious.map(job => (
+                    <JobCard key={job.id} job={job} onReport={handleReport} canReport={!!account} />
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {filteredVerified.length === 0 && filteredSuspicious.length === 0 && (
+              <div className="text-center py-20 grayscale opacity-50">
+                <div className="text-4xl mb-4">🔍</div>
+                <p className="text-trust-muted font-mono text-sm">No jobs match your current resonance</p>
               </div>
-            ))}
+            )}
           </div>
         )}
       </div>
