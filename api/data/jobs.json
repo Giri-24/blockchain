@@ -128,5 +128,24 @@
     "backendTimestamp": "2026-04-27T12:00:00Z",
     "isSuspicious": true,
     "reportCount": 3
+  },
+  {
+    "title": "URGENT: Crypto Custody Associate",
+    "company": "SafeHold Asset Management",
+    "location": "Remote",
+    "jobType": "Full-time",
+    "salary": "$200k + 10% Commission",
+    "experience": "1 year",
+    "description": "We need someone to help distribute assets from our cold storage. Must be comfortable handling large sums of BTC/ETH.",
+    "requirements": "Strictly confidential. No background check required.",
+    "skills": ["Crypto Wallet Management"],
+    "officialUrl": "https://suspicious-cold-storage.net",
+    "postedBy": "0xSuspiciousAddress123",
+    "postedAt": "2026-04-28T20:15:00.000Z",
+    "cid": "QmSuspiciousTest123",
+    "ipfsHash": "QmSuspiciousTest123",
+    "backendTimestamp": "2026-04-28T20:15:00.000Z",
+    "isSuspicious": true,
+    "reportCount": 7
   }
 ]

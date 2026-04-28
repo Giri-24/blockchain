@@ -58,6 +58,36 @@ async function main() {
       officialUrl: "https://example.com/jobs/2",
       postedBy: deployer.address,
       postedAt: new Date().toISOString()
+    },
+    {
+      title: "Blockchain Security Researcher (Tampered)",
+      company: "SecureProtocol",
+      location: "Remote",
+      jobType: "Full-time",
+      salary: "$150k - $200k",
+      experience: "5+ years",
+      description: "We are looking for a security researcher to audit our protocols.",
+      requirements: "Expertise in smart contract security.",
+      skills: ["Solidity", "Security", "Auditing"],
+      officialUrl: "https://example.com/jobs/3",
+      postedBy: deployer.address,
+      postedAt: new Date().toISOString(),
+      _testType: "tampered"
+    },
+    {
+      title: "Earn 10 ETH Daily - Legit Job",
+      company: "MoonSavings",
+      location: "Remote",
+      jobType: "Full-time",
+      salary: "10 ETH / Day",
+      experience: "No Experience",
+      description: "Fast way to earn crypto. Totally legit.",
+      requirements: "Must have a private key.",
+      skills: ["Crypto"],
+      officialUrl: "https://moon-scam.io",
+      postedBy: deployer.address,
+      postedAt: new Date().toISOString(),
+      _testType: "suspicious"
     }
   ];
 
@@ -74,16 +104,33 @@ async function main() {
 
     // 2. Post on-chain
     try {
-      const tx = await TrustChain.postJob(mockCid, bytes32Hash, job.company, job.title);
+      let finalHash = bytes32Hash;
+      if (job._testType === "tampered") {
+        console.log("🛠️  Simulating tampering: changing on-chain hash to mismatch data...");
+        finalHash = bytes32Hash.replace("a", "b").replace("1", "2"); // Slight modification
+      }
+
+      const tx = await TrustChain.postJob(mockCid, finalHash, job.company, job.title);
       await tx.wait();
-      console.log(`✅ On-chain success. Hash: ${bytes32Hash}`);
+      console.log(`✅ On-chain success. Hash: ${finalHash}`);
       
-      backendJobs.push({
+      const jobId = await TrustChain.jobCount();
+
+      if (job._testType === "suspicious") {
+        console.log("🚩 Simulating community reports for suspicious job...");
+        for (let i = 0; i < 6; i++) {
+          await (await TrustChain.reportJob(jobId)).wait();
+        }
+      }
+      
+      const backendEntry = {
         ...job,
         cid: mockCid,
         ipfsHash: mockCid,
         backendTimestamp: new Date().toISOString()
-      });
+      };
+      delete backendEntry._testType;
+      backendJobs.push(backendEntry);
     } catch (err) {
       console.warn(`⚠️  Failed to post ${job.title}: ${err.message}`);
     }

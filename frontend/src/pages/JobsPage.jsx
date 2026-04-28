@@ -74,7 +74,7 @@ export default function JobsPage() {
         recruiter: bj.postedBy,
         timestamp: bj.postedAt || bj.backendTimestamp,
         reportCount: "0",
-        isSuspicious: false,
+        isSuspicious: !!bj.isSuspicious,
         isActive: true,
         ipfsData: bj,
         verifyStatus: "portal-only",
